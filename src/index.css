@@ -1,0 +1,242 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: black;
+  background-color: white;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Navbar */
+
+.navbar {
+  padding-bottom: 1px;
+  border-bottom: solid 1px #e8e8e8;
+  background-color: white;
+  box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.12),
+    0 6px 16px -11px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  margin-bottom: 20px;
+  z-index: 99990;
+}
+
+.nav-header {
+  background-color: white;
+  border-bottom: 0;
+  padding: 0 4px 0 24px;
+}
+
+.logo {
+  width: 200px;
+  float: left;
+}
+
+.logo a {
+  display: inline-block;
+  font-size: 20px;
+  text-transform: capitalize;
+}
+
+.navbar-menu {
+  width: calc(100% - 200px);
+  float: left;
+}
+.navbar-menu .ant-layout-header {
+  padding: 0 20px;
+}
+
+.navbar-menu .ant-menu-horizontal {
+  border-bottom: 0;
+}
+
+.navbar-menu .ant-menu-item {
+  padding-bottom: 0px;
+}
+
+.navbar-menu .leftMenu {
+  float: left;
+}
+
+.navbar-menu .rightMenu {
+  float: right;
+}
+
+.menuButton {
+  float: right;
+  height: 32px;
+  padding: 6px;
+  margin-top: 14px;
+  display: none;
+  background: none;
+  margin-right: 10px;
+}
+
+.ant-drawer-body {
+  padding: 0;
+}
+
+.ant-drawer-body .ant-menu-horizontal > .ant-menu-item,
+.ant-drawer-body .ant-menu-horizontal > .ant-menu-submenu {
+  display: inline-block;
+  width: 100%;
+}
+
+.ant-drawer-body .ant-menu-horizontal {
+  border-bottom: none;
+}
+
+.ant-drawer-body .ant-menu-horizontal > .ant-menu-item:hover {
+  border-bottom-color: transparent;
+}
+
+.username {
+  display: none;
+  margin-left: 8px;
+}
+
+.font-pixelify-sans {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: x-large;
+}
+
+.main-title{
+  font-size: 6.5em; /* Increase font size as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: .15em solid black; /* Cursor */
+  width: fit-content; /* Ensure the element takes up the full width */
+  text-align: center; /* Center the text */
+  margin: 0 auto; /* Center the container */
+  animation: typing 4s steps(20, end), blink-caret .75s, erase 4s steps(20, end);
+  animation-iteration-count: infinite;
+
+
+}
+
+.contact-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 75vh;
+  flex-direction: column;
+  font-size: larger;
+
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 750px;
+}
+
+
+@keyframes typing {
+  0% { width: 0 }
+  50% { width: 100% }
+  60% { width: 100% }
+}
+
+@keyframes erase {
+  0% { width: 50% }
+  50% { width: 0 }
+  60% { width: 0 }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: black; }
+}
+
+
+@media (max-width: 767px) {
+  .menuButton {
+    display: block;
+    margin-right: 10px;
+  }
+
+  .leftMenu,
+  .rightMenu {
+    display: none;
+  }
+
+  .logo a {
+    margin-left: -10px;
+  }
+
+  .ant-drawer-title > .brand-font {
+    margin-bottom: 0;
+  }
+
+  .username {
+    display: inline-block;
+  }
+}
+
+/* Navbar End */
+
+/* 
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+} */

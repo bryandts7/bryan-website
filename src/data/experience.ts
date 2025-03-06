@@ -2,7 +2,15 @@ import tiktokLogo from '../assets/tiktok_logo.png';
 import ocbcLogo from '../assets/ocbc_logo.png'
 import finkuLogo from '../assets/finku_logo.png'
 
-export default [
+interface ExperienceProps {
+    year: string;
+    title: string;
+    duration: string;
+    logo?: string; // Optional since it might not always be provided
+    details: string;
+ }
+
+export const indExp: ExperienceProps[] = [
     {
        year: 'Jun 2024 - Today',
        title: 'Tech & Data Internship',

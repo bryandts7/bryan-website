@@ -1,6 +1,5 @@
-import React from 'react';
-import indExp from '../data/experience.js';
-import acExp from '../data/academic.js';
+import {indExp} from '../data/experience';
+import {acExp} from '../data/academic';
 import Experience from '../components/experience';
 import Title from '../components/title';
 

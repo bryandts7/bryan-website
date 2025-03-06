@@ -1,7 +1,15 @@
 import cuhkLogo from '../assets/cuhk_logo_2.png';
 
+interface ExperienceProps {
+    year: string;
+    title: string;
+    duration: string;
+    logo?: string; // Optional since it might not always be provided
+    details: string;
+ }
+ 
 
-export default [
+export const acExp: ExperienceProps[] = [
     {
        year: '2021 - Today',
        title: 'Bachelor of Science in Data Science, The Chinese University of Hong Kong Shenzhen',

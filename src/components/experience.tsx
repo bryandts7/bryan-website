@@ -1,6 +1,12 @@
-import React from 'react';
+interface ExperienceProps {
+   year: string;
+   title: string;
+   duration: string;
+   logo?: string; // Optional since it might not always be provided
+   details: string;
+}
 
-function Experience({ year, title, duration, logo, details }: any) {
+function Experience({ year, title, duration, logo, details }: ExperienceProps) {
    return (
       <ol className="flex flex-col md:flex-row relative border-l border-stone-200 dark:border-stone-700">
          <li className="mb-10 ml-4">

@@ -12,6 +12,13 @@ interface BlogProps {
   title: string;
 }
 
+interface CodeProps {
+  node?: any;
+  inline?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}
+
 const Blog: React.FC<BlogProps> = ({ content, title }) => {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -47,7 +54,7 @@ const Blog: React.FC<BlogProps> = ({ content, title }) => {
                 {...props}
               />
             ),
-            code: ({ node, inline, className, children, ...props }) => {
+            code: ({ node, inline, className, children, ...props }: CodeProps) => {
               const match = /language-(\w+)/.exec(className || "");
               return !inline && match ? (
                 <pre className="bg-gray-100 rounded p-4 my-4 overflow-x-auto">

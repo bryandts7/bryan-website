@@ -13,7 +13,7 @@ const LeftMenu = ({ mode } : any) => {
       </Menu.Item>
 
       <Menu.Item key="contact" className="bg-gray-900 hover:bg-white transition-colors duration-300">
-        <a className="!text-white hover:!text-black" href="/contact">Contact Me</a>
+        <a className="!text-white hover:!text-black" href="/portfolio">Projects</a>
       </Menu.Item>
       <Menu.Item key="blogs" className="bg-gray-900 hover:bg-white transition-colors duration-300">
         <a className="!text-white hover:!text-black" href="/blogs">Blog</a>

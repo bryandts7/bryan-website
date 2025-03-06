@@ -1,4 +1,9 @@
 // src/config/projects.ts
+import bhinnekaLogo from '../assets/projects/bhinneka.png'
+import effsegLogo from '../assets/projects/effseg.png'
+import whisperLogo from '../assets/projects/whisper.png'
+
+
 export interface Project {
     id: string;
     title: string;
@@ -16,7 +21,7 @@ export interface Project {
       id: 'bhinneka',
       title: 'Bhinneka',
       description: 'A Multilingual LLM for Indonesian Regional Languages',
-      imageUrl: '/src/assets/projects/bhinneka.png',
+      imageUrl: bhinnekaLogo,
       technologies: ['Python', 'LoRA', 'HuggingFace'],
       content: `Indonesia is home to over 700 languages, many of which are at risk of marginalization and extinction. 
         Despite this linguistic diversity, there is a notable lack of high-performing LLMs tailored for Indonesia. 
@@ -35,7 +40,7 @@ export interface Project {
       id: 'effseg',
       title: 'Efficient Semantic Segmentation',
       description: 'Knowledge Distillation utilizing Vision Transformer',
-      imageUrl: '/src/assets/projects/effseg.png',
+      imageUrl: effsegLogo,
       technologies: ['Python', 'Computer Vision', 'Knowledge Distillation'],
       content: `Accurate scene understanding is crucial for autonomous
         driving safety, with semantic segmentation being a key task.
@@ -66,7 +71,7 @@ export interface Project {
       id: 'whisper',
       title: 'Indian-Whisper',
       description: 'Fine-Tuning OpenAI Whisper for Enhanced Recognition of Indian-Accented English in ASR',
-      imageUrl: '/src/assets/projects/whisper.png',
+      imageUrl: whisperLogo,
       technologies: ['Python', 'ASR', 'HuggingFace'],
       content: `Automatic Speech Recognition (ASR) systems are integral to modern applications,
         yet they often struggle with diverse accents, particularly Indian-accented English,

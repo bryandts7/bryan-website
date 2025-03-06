@@ -2,6 +2,10 @@
 import bhinnekaLogo from '../assets/projects/bhinneka.png'
 import effsegLogo from '../assets/projects/effseg.png'
 import whisperLogo from '../assets/projects/whisper.png'
+import text2imgLogo from '../assets/projects/text2img.png'
+import mnist from '../assets/projects/mnist.png'
+
+
 
 
 export interface Project {
@@ -92,5 +96,26 @@ export interface Project {
       paperUrl: 'https://drive.google.com/file/d/12RfIH9noWZHnJs6gl8VtyK0rvORISVe9/view',
       demoUrl: 'https://huggingface.co/spaces/bryandts/whisper-english-india-accent'
     },
+
+    {
+        id: 'whisper',
+        title: 'CUHK(SZ) Text2Image',
+        description: 'Text-Based Image Generation CUHK Shenzhen Building',
+        imageUrl: text2imgLogo,
+        technologies: ['Python', 'PyTorch'],
+        content: `Completed an Advanced Machine Learning project leveraging Deep Convolutional Generative Adversarial Networks (DC-GANs) to generate realistic images from textual descriptions. Enhanced the GAN framework by introducing a third discriminator input for improved image-text matching and realism. The project focused on creating a dataset of 144 annotated campus building images, supporting high-quality text-to-image synthesis to help new and exchange students familiarize themselves with campus architecture. This innovative approach contributes to research on personalized and contextualized image generation with broader applications beyond academic settings.`,
+        paperUrl: 'https://drive.google.com/file/d/1RX0MvltXt-1qxPJiw4pMfXQV9UTs2-25/view',
+        demoUrl: 'https://huggingface.co/spaces/bryandts/cuhksz-text2image'
+      },
+
+      {
+        id: 'mnist',
+        title: 'MNIST CPP',
+        description: 'Handwritten Digit Recognition using Neural Networks',
+        imageUrl: mnist,
+        technologies: ['C++', 'OpenCV'],
+        content: `This project implements a neural network model to recognize handwritten digits (0-9) using the MNIST dataset. The project is written in C++ and utilizes OpenCV for data processing and model training.`,
+        githubUrl: 'https://github.com/bryandts7/mnist-cpp'
+      },
     // Add more projects
   ];

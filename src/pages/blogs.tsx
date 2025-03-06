@@ -1,20 +1,8 @@
 import React from 'react';
 import BlogList from '../components/blogList';
 import  NavBar from '../components/NavBar';
+import  {blogPosts} from '../data/blogs';
 
-// Define the BlogPost type
-interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-}
-
-// Sample blog posts data
-const blogPosts: BlogPost[] = [
-  { id: '1', title: 'Introduction to Markdown', excerpt: 'Learn the basics of Markdown syntax...' },
-  { id: '2', title: 'Advanced Math Formulas', excerpt: 'Explore complex mathematical expressions...' },
-  { id: '3', title: 'Responsive Design Tips', excerpt: 'Best practices for creating responsive layouts...' },
-];
 
 const BlogListPage: React.FC = () => {
   return (

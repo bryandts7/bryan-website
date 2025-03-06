@@ -5,6 +5,7 @@ interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
+  content: string;
 }
 
 interface BlogListProps {

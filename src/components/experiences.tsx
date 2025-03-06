@@ -13,7 +13,7 @@ function Experiences() {
                   key={index}
                   year={item.year}
                   title={item.title}
-                  duration={item.duration}
+                  company={item.company}
                   logo={item.logo}
                   details={item.details}
                />
@@ -26,7 +26,7 @@ function Experiences() {
                   key={index}
                   year={item.year}
                   title={item.title}
-                  duration={item.duration}
+                  company={item.company}
                   logo={item.logo}
                   details={item.details}
                />

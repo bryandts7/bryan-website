@@ -4,7 +4,10 @@ import effsegLogo from '../assets/projects/effseg.png'
 import whisperLogo from '../assets/projects/whisper.png'
 import text2imgLogo from '../assets/projects/text2img.png'
 import mnist from '../assets/projects/mnist.png'
-
+import compGPT from '../assets/projects/compGPT.png'
+import cuhkEcom from '../assets/projects/cuhkEcom.png'
+import potNet from '../assets/projects/potraitNet.png'
+import ptp from '../assets/projects/ptp.png'
 
 
 
@@ -26,7 +29,7 @@ export interface Project {
       title: 'Bhinneka',
       description: 'A Multilingual LLM for Indonesian Regional Languages',
       imageUrl: bhinnekaLogo,
-      technologies: ['Python', 'LoRA', 'HuggingFace'],
+      technologies: ['Python', 'LoRA', 'SFT', 'HuggingFace'],
       content: `Indonesia is home to over 700 languages, many of which are at risk of marginalization and extinction. 
         Despite this linguistic diversity, there is a notable lack of high-performing LLMs tailored for Indonesia. 
         Additionally, the demand for mobile-compatible LLMs is high for digital applications in Indonesia. 
@@ -72,8 +75,21 @@ export interface Project {
       paperUrl: 'https://drive.google.com/file/d/19t2ndm7cFX7UfP49gGHYa-tEq8PbVrL8/view'
     },
     {
+        id: 'potnet',
+        title: 'PotraitNet Mattinghuman',
+        description: 'Reproduce PotraitNet for Large Mattinghuman Dataset in edge devices',
+        imageUrl: potNet,
+        technologies: ['Python', 'Computer Vision', 'PyTorch'],
+        content: `Implemented a modified version of the PortraitNet architecture for real-time
+        portrait segmentation, using cross-entropy loss and consistency constraint loss for training. Various data augmentation techniques were applied to enhance performance.
+        The model was trained on the EG1800 and Mattinghuman datasets, achieving high accuracy in semantic segmentation tasks. Despite computational constraints, the models demonstrated
+        competitive results, particularly in boundary segmentation and overall accuracy, with mIOU reaching 95.31% on the EG1800 test dataset using EG1800 pretrained and 93.83%
+        using Mattinghuman pretrained. Furthermore, the face parsing implemented using multi-class classification reach 94.38% overall mIOU metrics over all classes`,
+        githubUrl: 'https://github.com/bryandts7/PotraitNet-Mattinghuman'
+      },
+    {
       id: 'whisper',
-      title: 'Indian-Whisper',
+      title: 'Indian English Whisper',
       description: 'Fine-Tuning OpenAI Whisper for Enhanced Recognition of Indian-Accented English in ASR',
       imageUrl: whisperLogo,
       technologies: ['Python', 'ASR', 'HuggingFace'],
@@ -98,7 +114,18 @@ export interface Project {
     },
 
     {
-        id: 'whisper',
+        id: 'complianceGPT',
+        title: 'Compliance GPT',
+        description: 'AI-as-a-service (AIaas) solution that answers banking compliance question within 30 seconds up to 85% accuracy',
+        imageUrl: compGPT,
+        technologies: ['Python', 'Langchain', 'OpenAI API', 'VectorDB', 'FastAPI', 'React'],
+        content: `The compliance review between business and compliance is time-consuming; optimizing it could unlock significant business opportunities; however, the compliance team faces hurdles in efficiently managing 10k+ regulatory documents, potential for human-risk and inefficiencies. Compliance GPT offers an AI-as-a-service (AIaas) solution that answers banking compliance question within 30 seconds up to 85% accuracy. It addresses key gaps by saving 83% time and 97% usage cost for compliance review, while being available 24/7 as a standardized knowledge. Compliance GPT does not replace compliance teams; it revolutionizes them, helping businesses capture opportunities more efficiently
+`,
+        demoUrl: 'https://www.youtube.com/watch?v=PjGoE4-sRTs'
+      },
+
+    {
+        id: 'text2img',
         title: 'CUHK(SZ) Text2Image',
         description: 'Text-Based Image Generation CUHK Shenzhen Building',
         imageUrl: text2imgLogo,
@@ -108,6 +135,27 @@ export interface Project {
         demoUrl: 'https://huggingface.co/spaces/bryandts/cuhksz-text2image'
       },
 
+      {
+        id: 'ptp',
+        title: 'Party Together Problem',
+        description: 'Finding pick-up locations that optimizes the transportation plan for the Party Together problem, which is an NP-Hard problem.',
+        imageUrl: ptp,
+        technologies: ['Travelling Salesman Problem', 'Heuristic'],
+        content: ``,
+        githubUrl: 'https://github.com/bryandts7/party-together',
+        paperUrl: 'https://github.com/bryandts7/party-together/blob/main/CSC4120_Project_Report__Copy_.pdf'
+      },
+
+      {
+        id: 'cuhk_ecom',
+        title: 'CUHK(SZ) E-commerce',
+        description: 'E-commerce platform tailored to the CUHK Shenzhen community',
+        imageUrl: cuhkEcom,
+        technologies: ['Flask', 'SQLite', 'Bootstrap', 'Javascript'],
+        content: `This project implements a neural network model to recognize handwritten digits (0-9) using the MNIST dataset. The project is written in C++ and utilizes OpenCV for data processing and model training.`,
+        githubUrl: 'https://github.com/bryandts7/ecom_cuhksz_new',
+        demoUrl: 'https://www.youtube.com/watch?v=IXFE7oJ1tCg'
+      },
       {
         id: 'mnist',
         title: 'MNIST CPP',

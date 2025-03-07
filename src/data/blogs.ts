@@ -7,7 +7,7 @@ interface BlogPost {
 
 export  const blogPosts:BlogPost[] = [
   {
-    id: '1',
+    id: 'how-calculus-works',
     title: 'How Calculus Works in Daily Life',
     excerpt: 'Calculus is a branch of mathematics that deals with...',
     content: `
@@ -103,7 +103,7 @@ Calculus is a branch of mathematics that deals with rates of change (differentia
   },
 
   {
-    id: '2',
+    id: 'lying-with-statistics',
     title: 'Lying with Statistics: How Numbers Can Deceive',
     excerpt:'Statistics is a powerful for making informed decisions; however...',
     content:`
@@ -240,5 +240,134 @@ $$
 \\boxed{\\text{Numbers don’t lie, but people can lie with numbers. Stay curious and skeptical!}}
 $$
     `
+  },
+
+  {
+  id: 'how-gpt-works',
+  title:'How ChatGPT Works? A Beginner’s Guide',
+  excerpt: 'ChatGPT can write essays, answer questions, and even crack jokes! But how do they actually work...',
+  content:`
+
+Large Language Models (LLMs) like ChatGPT, GPT-4, and others have taken the world by storm. They can write essays, answer questions, and even crack jokes! But how do they actually work? In this blog, we’ll break down the basics of LLMs in a simple, casual way—no PhD required!
+
+---
+
+## **1. What is a Large Language Model?**
+A Large Language Model is a type of artificial intelligence (AI) designed to understand and generate human-like text. It’s trained on massive amounts of text data (like books, articles, and websites) to learn patterns in language.
+
+Think of it as a super-smart parrot: it doesn’t truly "understand" language like humans do, but it can mimic patterns and generate text that sounds natural.
+
+---
+
+## **2. The Building Blocks of LLMs**
+LLMs are built using a technology called **neural networks**, specifically a type called **transformers**. Here’s how they work:
+
+### **a. Tokenization: Breaking Text into Pieces**
+Before an LLM can process text, it breaks it down into smaller chunks called **tokens**. Tokens can be words, parts of words, or even punctuation.
+
+#### **Example:**
+The sentence *"I love AI!"* might be tokenized as:
+$$
+\\text{Tokens} = [\\text{"I"}, \\text{"love"}, \\text{"AI"}, \\text{"!"}]
+$$
+
+
+Each token is assigned a unique number so the computer can work with it. For example:
+$$
+\\text{Token IDs} = [42, 17, 89, 5]
+$$
+
+---
+
+### **b. Embeddings: Turning Tokens into Numbers**
+Once text is tokenized, the model converts each token into a vector (a list of numbers) called an **embedding**. These embeddings capture the meaning and context of the tokens.
+
+Mathematically, an embedding is a high-dimensional vector:
+$$
+\\text{Embedding for "love"} = [0.25, -0.1, 0.7, \\dots, 0.02]
+$$
+
+These numbers represent relationships between words. For example, the embeddings for "king" and "queen" might be close to each other because they’re related.
+
+---
+
+### **c. Attention Mechanism: Focusing on What Matters**
+The **attention mechanism** is the secret sauce of LLMs. It helps the model focus on the most important parts of a sentence when generating text.
+
+For example, in the sentence *"The cat sat on the mat,"* the word *"sat"* is closely related to *"cat"* and *"mat."* The attention mechanism assigns weights to these relationships:
+$$
+\\text{Attention Weights} = \\begin{cases}
+\\text{cat} \\rightarrow \\text{sat}: 0.8 \\\\
+\\text{mat} \\rightarrow \\text{sat}: 0.6 \\\\
+\\text{the} \\rightarrow \\text{sat}: 0.1
+\\end{cases}
+$$
+
+This allows the model to understand context and generate coherent text.
+
+---
+
+### **d. Layers and Parameters: The Brain of the Model**
+LLMs are made up of many **layers** of neural networks. Each layer processes the input text and passes it to the next layer. The model has billions of **parameters** (adjustable numbers) that it learns during training.
+
+For example, GPT-3 has 175 billion parameters! These parameters are fine-tuned to predict the next word in a sentence.
+
+---
+
+## **3. Training the Model**
+Training an LLM involves feeding it massive amounts of text data and teaching it to predict the next word in a sentence.
+
+### **Example:**
+Given the sentence *"The sky is ___,"* the model learns to predict that the next word is likely *"blue."*
+
+Mathematically, the model tries to maximize the probability of the correct next word:
+$$
+P(\\text{blue} | \\text{The sky is})
+$$
+
+This is done using a process called **gradient descent**, where the model adjusts its parameters to minimize errors.
+
+---
+
+## **4. Generating Text**
+Once trained, the model can generate text by predicting one word (or token) at a time.
+
+### **Example:**
+Input: *"Once upon a"*
+Output: *"time"*
+
+The model repeats this process, generating one token at a time, until it completes a sentence or paragraph.
+
+---
+
+## **5. Limitations of LLMs**
+While LLMs are impressive, they have some limitations:
+- **No True Understanding**: They don’t truly "understand" language; they just predict patterns.
+- **Bias**: They can inherit biases from the data they’re trained on.
+- **Fact-Checking**: They can generate incorrect or nonsensical information.
+
+---
+
+## **6. Fun Analogy: LLMs Are Like Chefs**
+Think of an LLM as a chef who has read millions of recipes. It doesn’t "understand" cooking like a human chef, but it can combine ingredients (tokens) in ways that sound delicious (coherent). Sometimes, it might create a weird dish (nonsense), but most of the time, it’s pretty good!
+
+---
+
+
+## **7. Why Should You Care?**
+LLMs are transforming how we interact with technology. They power chatbots, translation tools, and even creative writing assistants. Understanding the basics helps you appreciate their potential—and their limitations.
+
+---
+
+## **Conclusion**
+Large Language Models are like magical word machines: they take in text, process it using math and neural networks, and generate human-like responses. While they’re not perfect, they’re incredibly powerful tools that are shaping the future of AI.
+
+So the next time you chat with an AI, remember: behind the scenes, it’s all about tokens, embeddings, and attention mechanisms!
+
+$$
+\\boxed{\\text{LLMs: Turning math into magic, one token at a time!}}
+$$
+  `
+
   }
 ];

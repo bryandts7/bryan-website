@@ -60,7 +60,7 @@ export default function Footer() {
     <div
       className="bg-neutral-300 p-4 text-center text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200">
       <a href="/blogs" className='underline hover:underline-offset-4	'>
-      Read my Blog about Machine Learning Topics
+      Read my Blog about Casual Mathematics Topics
       </a>
     </div>
   </footer>

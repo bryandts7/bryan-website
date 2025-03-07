@@ -15,7 +15,7 @@ export const indExp: ExperienceProps[] = [
     {
         year: 'Mar 2025 - Current',
         title: 'Data Scientist',
-        company: 'Pixalate (Virginia, U.S.A)',
+        company: 'Pixalate (Virginia, United States)',
         logo: pixalateLogo,
         details: 
            'Excited to contribute ASAP!',

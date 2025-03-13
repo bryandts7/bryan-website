@@ -24,7 +24,7 @@ const Index = () => {
             {/* Text content */}
             <div className="text-left md:pr-72">
               <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4" data-aos="fade-up" data-aos-delay="0" data-aos-once>
-                I am an <b>undergraduate student</b> from the Chinese University of Hong Kong Shenzhen, pursuing my final year for
+                My name is <b>Bryan Delton Tawarikh Sibarani (Bryan)</b>. I am an <b>undergraduate student</b> from the Chinese University of Hong Kong Shenzhen, pursuing my final year for
                 Bachelors of Science in <b>Data Science and Big Data Technology</b>.
               </p>
               

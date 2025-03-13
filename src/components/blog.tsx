@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import mermaid from "mermaid";
 import "katex/dist/katex.min.css";
 
 interface BlogProps {
@@ -18,6 +19,25 @@ interface CodeProps {
   className?: string;
   children?: React.ReactNode;
 }
+
+const Mermaid: React.FC<{ chart: string }> = ({ chart }) => {
+  const mermaidRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (mermaidRef.current) {
+      mermaid.initialize({ startOnLoad: true });
+      mermaid.contentLoaded();
+    }
+  }, [chart]);
+
+  return (
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <div className="mermaid" ref={mermaidRef}>
+        {chart}
+      </div>
+    </div>
+  );
+};
 
 const Blog: React.FC<BlogProps> = ({ content, title }) => {
   return (
@@ -56,13 +76,20 @@ const Blog: React.FC<BlogProps> = ({ content, title }) => {
             ),
             code: ({ node, inline, className, children, ...props }: CodeProps) => {
               const match = /language-(\w+)/.exec(className || "");
-              return !inline && match ? (
-                <pre className="bg-gray-100 rounded p-4 my-4 overflow-x-auto">
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                </pre>
-              ) : (
+              if (!inline && match) {
+                const language = match[1];
+                if (language === "mermaid") {
+                  return <Mermaid chart={String(children)} />;
+                }
+                return (
+                  <pre className="bg-gray-100 rounded p-4 my-4 overflow-x-auto">
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  </pre>
+                );
+              }
+              return (
                 <code className="bg-gray-100 rounded px-1 py-0.5" {...props}>
                   {children}
                 </code>

@@ -8,8 +8,8 @@ import compGPT from '../assets/projects/compGPT.png'
 import cuhkEcom from '../assets/projects/cuhkEcom.png'
 import potNet from '../assets/projects/potraitNet.png'
 import ptp from '../assets/projects/ptp.png'
-
-
+// Add a placeholder for translator logo - you can replace with actual image
+import translatorLogo from '../assets/translator.png'
 
 export interface Project {
     id: string;
@@ -21,9 +21,68 @@ export interface Project {
     paperUrl?: string;
     demoUrl?: string;
     content?: string;
+    isInteractive?: boolean; // New field to indicate interactive projects
   }
   
   export const projects: Project[] = [
+    {
+      id: 'bahasa-unang-translator',
+      title: 'Bahasa Unang Translator',
+      description: 'An interactive web translator for Bahasa Unang, a constructed language based on Indonesian',
+      imageUrl: translatorLogo, // Placeholder image
+      technologies: ['TypeScript', 'React', 'Tailwind CSS', 'NLP'],
+      content: `
+      Bahasa Unang: Indonesian Secret Language
+
+Bahasa Unang is a playful encrypted version of Indonesian language commonly used among Indonesian students as a secret code language. Similar to "Pig Latin" in English, it transforms regular Indonesian words using a systematic formula, making conversations incomprehensible to those who don't know the rules.
+
+The Basic Formula
+
+Every Indonesian word follows this transformation pattern:
+
+U(x) = (b)n(c)ng
+
+Where:
+- x = Last syllable with all vowels changed to 'a'
+- b = Word with the last syllable removed  
+- c = Original vowel(s) from the last syllable
+
+Examples
+
+hancur becomes uncar hanung
+lari becomes ura laning
+siapa becomes upa sianang
+gua becomes ua gunang
+
+Special Rules
+
+Rule 1: Consonant Movement
+If there's a consonant before the last syllable, it moves with the last syllable.
+Example: "sebentar" becomes "untar sebenang" (not "utar sebennang")
+
+Rule 2: Single Syllable Words
+For one-syllable words, remove the 'b' component.
+Example: "bel" becomes "ubal neng"
+
+Rule 3: Words Ending with "nya"
+Handle the suffix specially to maintain meaning.
+Example: "sepedanya" becomes "uda sepenangnya"
+
+How It Works
+
+Indonesian words are split into syllables first. The last syllable gets transformed according to the formula, while the remaining syllables form the middle part. For words like "gua" which is pronounced "gu-a", it splits into two syllables and follows the regular pattern.
+
+Cultural Background
+
+Bahasa Unang was created by Indonesian students for private communication in schools. It's still used today in social media, gaming communities, and among friends who want to have conversations that sound mysterious to outsiders. The language represents the playful and creative nature of Indonesian youth culture.
+
+Why Learn It
+
+Learning Bahasa Unang gives you insight into Indonesian culture, provides a fun way to exercise your language skills, and lets you participate in a unique form of communication that strengthens social bonds within Indonesian communities.
+      `,
+      isInteractive: true,
+      demoUrl: '/translator'
+    },
     {
       id: 'bhinneka',
       title: 'Bhinneka',
@@ -39,7 +98,7 @@ export interface Project {
         LLM that supports English, Indonesian, and 8 regional languages. We evaluate
         the resulting model, Bhinneka 1.5B, on both discriminative and generative tasks.
         The results indicate that our model, despite its smaller size, can compete with
-        larger models in Indonesia’s regional languages. `,
+        larger models in Indonesia's regional languages. `,
         paperUrl: 'https://drive.google.com/file/d/1ct052hR68AtbWI1vd70oe0qqErb78r9o/view',
         demoUrl: 'https://huggingface.co/richardcsuwandi/bhinneka'
     },

@@ -12,7 +12,7 @@ interface ExperienceProps {
 
 export const acExp: ExperienceProps[] = [
     {
-       year: '2021 - Current',
+       year: '2021 - 2025',
        title: 'B.Sc in Data Science',
        company: 'The Chinese University of Hong Kong Shenzhen',
        logo: cuhkLogo,
@@ -20,7 +20,7 @@ export const acExp: ExperienceProps[] = [
           '18, we were undergrads, stayed out late, never made it to class, uh ',
     },
     {
-        year: 'Jan 2025 - Current',
+        year: 'Jan 2025 - May 2025',
         title: 'Quantitative Research (Capstone)',
         company: 'Rabbit Fund (中欧瑞博投资管理)',
         logo: rabbitLogo,

@@ -1,7 +1,7 @@
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import "./about.css";
-import MyFace from "../assets/bryan_photo.jpg";
+import MyFace from "../assets/bryan_photo_new.jpg";
 
 const Index = () => {
   return (

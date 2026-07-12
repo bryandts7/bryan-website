@@ -678,181 +678,72 @@ Whether you’re generating art, composing music, or simulating virtual worlds, 
   },
 
   {
-    id: 'love-bayesian',
-    title:'Love as a Bayesian Update',
-    excerpt: 'In Bayesian statistics, belief is never static. It is, unexpectedly, a framework for love.',
-    content: `
-In Bayesian statistics, belief is never static. It evolves.
-We begin with a **prior**, update it with evidence, and arrive at a **posterior**—a belief shaped by experience.
-
-This is not just a framework for inference. It is, unexpectedly, a framework for love.
-
----
-
-## 1. The Prior
-
-Let  
-
-$$
-H = \\text{“There is something more than friendship.”}
-$$
-
-Before any meaningful evidence, I held a strong prior:
-
-$$
-P(H) \\approx 0
-$$
-
-Not because it was impossible, but because the world, as I understood it then, gave me no reason to believe otherwise.
-
-We were friends. Comfortable. Familiar.  
-The prior was simple and stable.
-
----
-
-## 2. The First Likelihood
-
-Evidence rarely announces itself as such.
-
-It arrives disguised as moments:
-- a shared silence that feels full,
-- a conversation that lingers after it ends,
-- a feeling that does not fit neatly into the prior.
-
-Call the first meaningful observation $ E_1 $.
-
-What mattered was not that $ E_1 $ occurred,  
-but that
-
-$$
-P(E_1 \\mid H) > P(E_1 \\mid \\neg H)
-$$
-
-The evidence was weak—but directional.
-
-The posterior shifted slightly:
-
-$$
-P(H \\mid E_1) \\propto P(E_1 \\mid H)\\,P(H)
-$$
-
-Not enough to change behavior.  
-Enough to change awareness.
-
----
-
-## 3. When Evidence Must Be Ignored
-
-Bayesian inference is contextual.
-
-Sometimes, evidence cannot be acted upon—not because it is false, but because it is **inadmissible**.
-
-New observations arrived.  
-Call them $ E_2, E_3 $.
-
-Under different circumstances, they would have mattered greatly.  
-But constraints existed.
-
-So I did something statistically defensible and emotionally difficult:  
-I **downweighted** the likelihood.
-
-The posterior remained close to the prior—not because the signal was absent,  
-but because acting on it would have violated the conditions of the problem.
-
----
-
-## 4. Independent Observations
-
-Time passed.  
-The context changed.
-
-Then came a new sequence of observations:
-
-$$
-E = \\{E_4, E_5, \\dots, E_n\\}
-$$
-
-None of them dramatic on their own.
-
-But they were **independent**,  
-and they were **consistent**.
-
-Support, presence, care—appearing not once, but repeatedly.
-
-The cumulative likelihood became impossible to ignore:
-
-$$
-P(E \\mid H) = \\prod_{i=4}^{n} P(E_i \\mid H)
-$$
-
-And slowly, inevitably:
-
-$$
-P(H \\mid E) \\gg P(H)
-$$
-
-The posterior was no longer a tentative adjustment.  
-It was a reorientation.
-
----
-
-## 5. Bayesian Belief Is Not Certainty
-
-A posterior probability is not a declaration of truth.
-
-It does not say *“this is love.”*  
-It says:
-
-> “Given everything I have observed, this belief is now the most reasonable.”
-
-There was still uncertainty.  
-There always is.
-
-But uncertainty does not imply inaction.
-
-Bayesian reasoning does not wait for $ P(H) = 1 $.  
-It asks when belief is strong enough that **not acting becomes irrational**.
-
----
-
-## 6. The Decision
-
-At some point, gathering more data stops being inference and starts being avoidance.
-
-The posterior had stabilized.
-
-Continuing to pretend the prior still held  
-would have been a violation of everything Bayesian reasoning stands for.
-
-So I acted—not because I was certain,  
-but because the evidence deserved honesty.
-
----
-
-## 7. What Bayesian Statistics Taught Me About Love
-
-Love is not a leap without logic.
-
-It is:
-- admitting your priors were wrong,
-- recognizing when noise becomes signal,
-- respecting constraints,
-- and having the courage to act under uncertainty.
-
-Bayesian inference does not eliminate doubt.  
-It teaches us how to live with it, gracefully.
-
----
-
-## Final Posterior
-
-I do not claim certainty.
-
-But after all the updates, all the evidence, and all the restraint,  
-this belief carries the highest posterior probability of them all.
-
-And this time, I trust the math.
-
+    id: 'latent-proximity-graphs',
+    title: 'Latent Proximity: On Graphs, Embeddings, and Edges That Take Years to Form',
+    excerpt: "Most people who work with graphs spend their time thinking about the existing connections...",
+    content:
     `
+Most people who work with graphs spend their time thinking about the connections that exist. Lately I've been thinking more about the ones that don't — and why a missing connection isn't the same as "these two things have nothing to do with each other."
+
+---
+
+## **1. A Graph Is More Than Its Connections**
+
+A graph is just a set of things (nodes) and the connections between them (edges). That's it. Two people, two web pages, two devices — anything can be a node, and an edge just means "these two are linked somehow."
+
+But here's the part that surprises people when they first learn graph machine learning: the edges you can see are almost never the full story. Underneath the visible connections, a graph ML model learns something called an **embedding** for every node — a vector, essentially a list of numbers, that places each node somewhere in a shared coordinate space based on its role and relationships in the graph. Write it as $$ z_v $$ for a node $$ v $$. Nodes that are similar, or that tend to show up in the same neighborhoods, end up with vectors that sit close together in this space — whether or not there's currently a direct connection between them.
+
+This is the whole idea behind methods like **node2vec** or **GraphSAGE**, which are standard tools for this kind of task: the real signal is how close two embeddings are, not just whether a line currently connects the two nodes on paper. That distinction ends up mattering a lot.
+
+---
+
+## **2. Deleting a Connection Doesn't Erase the Similarity**
+
+Say two nodes, $$ B $$ and $$ K $$, are connected for a while — then, for whatever reason, that connection gets removed. Maybe it's a broken link, a deprecated relationship, something blocked. On paper, $$ B $$ and $$ K $$ are now disconnected. They might even end up in totally separate clusters of the graph, with no path between them at all.
+
+But here's what's easy to miss: removing the connection doesn't automatically move $$ B $$ and $$ K $$ apart in that underlying similarity space. If they became close because of deep, structural reasons — shared context, overlapping neighborhoods, similar patterns — those reasons don't just disappear because one link got cut. $$ B $$ and $$ K $$ can stay "close" in the model's eyes for a long time after they've become disconnected in reality.
+
+This is exactly why **link prediction** exists as a technique. It doesn't ask "is there a connection right now?" It asks: based on everything the model has learned, how *likely* is it that a connection should exist between these two? The way this gets calculated is almost embarrassingly simple. Take the two embeddings, $$ z_u $$ and $$ z_v $$, multiply them together (a dot product — a way of measuring how aligned two vectors are), squash the result into a probability between 0 and 1, and you get a score:
+
+$$
+\\text{score}(u, v) = \\sigma(z_u \\cdot z_v)
+$$
+
+A good link prediction model can look at two nodes with zero visible connection between them, run this calculation, and still get a high score — "these two are actually very likely to link up" — because their underlying vectors, $$ z_u $$ and $$ z_v $$, never really drifted apart, even though the visible edge did.
+
+---
+
+## **3. Being "Disconnected" Isn't Always Permanent**
+
+If you only look at the raw graph, two disconnected nodes look final — there's no path between them, end of story. But that's just a snapshot. It says nothing about whether they're likely to reconnect later.
+
+This is why more advanced graph models don't just look at one snapshot of a graph — they look at how the graph changes over time. Instead of treating a missing connection as permanent, they ask: given how things have evolved so far, what's the probability this connection reappears down the line?
+
+$$
+\\mathbb{P}\\big(\\text{edge}(u, v, t+\\Delta) = 1 \\;\\big|\\; \\text{graph history up to } t\\big)
+$$
+
+That probability isn't automatically zero just because nothing is connected right now. It can be sitting there quietly, real and significant, waiting for the rest of the graph to catch up to what the pattern already suggests.
+
+---
+
+## **4. Sometimes It Takes a Third Party**
+
+There's one more piece worth mentioning: two nodes rarely reconnect purely on their own. Usually, there's a third node, $$ w $$, connected to both $$ B $$ and $$ K $$, that ends up acting as a bridge. In practice, this happens almost automatically in these models: if $$ w $$ is linked to both $$ B $$ and $$ K $$, that shared connection quietly pulls their embeddings, $$ z_B $$ and $$ z_K $$, closer together in vector space, even while $$ B $$ and $$ K $$ are technically stuck in separate parts of the graph.
+
+In other words, reconnection is rarely just two things finding their way back to each other directly. Usually, it's something else in between — a shared connection, a common thread — that was there the whole time, even when $$ B $$ and $$ K $$ looked completely unreachable from each other.
+
+---
+
+## **5. Why This Sticks With Me**
+
+What I like about link prediction is that it's built entirely around one idea: **the absence of a connection doesn't mean absence of a relationship.** If a model only looked at what's currently connected, it would never predict anything new — there'd be nothing to go on. It's only because $$ z_u $$ and $$ z_v $$ keep existing, independent of whatever the graph currently shows, that a model can compute $$ \\text{score}(u, v) $$ and get a high number for two nodes that look completely disconnected on paper.
+
+Some connections get cut and stay cut. But some don't — they just sit there, quietly scoring high in the background, waiting for one shared connection, or one more update to the graph, before reality catches up to what the embeddings already knew.
+
+$$
+\\text{score}(u, v) = \\sigma(z_u \\cdot z_v) \\;\\rightarrow\\; \\text{high, long before an edge actually reappears}
+$$
+ `
   }
 ];

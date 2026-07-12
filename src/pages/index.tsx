@@ -24,8 +24,9 @@ const Index = () => {
             {/* Text content */}
             <div className="text-left md:pr-72">
               <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4" data-aos="fade-up" data-aos-delay="0" data-aos-once>
-                My name is <b>Bryan Delton Tawarikh Sibarani (Bryan)</b>. I am an <b>undergraduate student</b> from the Chinese University of Hong Kong Shenzhen, pursuing my final year for
-                Bachelors of Science in <b>Data Science and Big Data Technology</b>.
+                My name is <b>Bryan Delton Tawarikh Sibarani (Bryan)</b>. I graduate with B.Sc from the Chinese University of Hong Kong Shenzhen
+                in <b>Data Science and Big Data Technology</b>. I am <b>working remotely</b> for a leading AdTech Analytics Company in US, <b>Pixalate</b>, as a <b>Junior Data Scientist</b>.
+                Currently I work through some projects, ranging from ML-Based Fraud Detection, Post-Bid Analytics, and  Agentic AI.
               </p>
               
               <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4" data-aos="fade-up" data-aos-delay="0" data-aos-once>
@@ -48,11 +49,11 @@ const Index = () => {
               <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4" data-aos="fade-up" data-aos-delay="0" data-aos-once>
                 I am a dedicated team player, and I get along well with any team environment. I do well under pressure, which makes me
                 a good addition to any team. I also have strong command over <b>Data Structures & Algorithms, Machine Learning,
-                Gen-AI</b>, and many more Data & ML topics.
+                Gen-AI</b>, and even in <b>Quant</b> related topics.
               </p>
               
               <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4" data-aos="fade-up" data-aos-delay="0" data-aos-once>
-                Outside of work, I enjoy myself in various sports, including football and basketball. 
+                Outside of work, I enjoy myself in various sports, including gym, football, and  badminton. 
                 I am also interested in Public Policy, Finance, and Economics. Hit me up for any discussion.
               </p>
             </div>

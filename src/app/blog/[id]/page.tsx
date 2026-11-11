@@ -17,7 +17,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const post = await getPost(id);
   if (!post) return {};
-  return { title: post.title, description: post.excerpt };
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.excerpt,
+      publishedTime: post.published_at ?? undefined,
+      images: post.cover_image_url ? [post.cover_image_url] : undefined,
+    },
+  };
 }
 
 export default async function BlogPostPage({ params }: Props) {
@@ -32,6 +42,7 @@ export default async function BlogPostPage({ params }: Props) {
         title={post.title}
         content={post.content_md}
         date={formatDate(post.published_at)}
+        coverImageUrl={post.cover_image_url}
       />
     </div>
   );

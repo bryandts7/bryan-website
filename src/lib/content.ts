@@ -139,13 +139,4 @@ export async function getSiteContent(key: string): Promise<string> {
   return data?.value_md ?? "";
 }
 
-/** "March 7, 2025" (UTC), or null when the post has no publish date. */
-export function formatDate(iso: string | null): string | null {
-  if (!iso) return null;
-  return new Date(iso).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
-}
+export { formatDate } from "./dates";

@@ -1,14 +1,14 @@
-import Image, { type StaticImageData } from 'next/image';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface ProjectCardProps {
   title: string;
   description: string;
-  imageUrl: StaticImageData;
+  imageUrl: string | null;
   technologies: string[];
-  githubUrl?: string;
-  paperUrl?: string;
-  demoUrl?: string;
+  githubUrl?: string | null;
+  paperUrl?: string | null;
+  demoUrl?: string | null;
   id: string;
   isInteractive?: boolean;
 }
@@ -26,14 +26,16 @@ const ProjectCard = ({
 }: ProjectCardProps) => {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-      <div className="relative h-48">
-        <Image
-          src={imageUrl}
-          alt={title}
-          fill
-          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-          className="object-cover hover:scale-105 transition-transform duration-300"
-        />
+      <div className="relative h-48 bg-gray-100">
+        {imageUrl && (
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="object-cover hover:scale-105 transition-transform duration-300"
+          />
+        )}
         {isInteractive && (
           <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
             Interactive

@@ -1,10 +1,10 @@
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 
 export interface ExperienceProps {
   year: string;
   title: string;
   company: string;
-  logo?: StaticImageData; // Optional since it might not always be provided
+  logo?: string | null; // Optional since it might not always be provided
   details: string;
 }
 

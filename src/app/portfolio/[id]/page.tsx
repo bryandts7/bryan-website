@@ -2,27 +2,29 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import BackLink from "@/components/BackLink";
+import MarkdownContent from "@/components/MarkdownContent";
 import Title from "@/components/title";
-import { projects } from "@/data/projects";
+import { getProject, getProjects } from "@/lib/content";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
-export function generateStaticParams() {
-  return projects.map(({ id }) => ({ id }));
+export async function generateStaticParams() {
+  const projects = await getProjects();
+  return projects.map(({ slug }) => ({ id: slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const project = projects.find((p) => p.id === id);
+  const project = await getProject(id);
   if (!project) return {};
   return { title: project.title, description: project.description };
 }
 
 export default async function ProjectDetailsPage({ params }: Props) {
   const { id } = await params;
-  const project = projects.find((p) => p.id === id);
+  const project = await getProject(id);
   if (!project) notFound();
 
   return (
@@ -35,14 +37,18 @@ export default async function ProjectDetailsPage({ params }: Props) {
         <Title>{project.title}</Title>
 
         {/* Image Container with constrained size */}
-        <div className="relative w-full max-w-4xl mx-auto mb-8">
-          <Image
-            src={project.imageUrl}
-            alt={project.title}
-            sizes="(min-width: 896px) 896px, 100vw"
-            className="object-contain w-full h-full max-h-96 rounded-lg"
-          />
-        </div>
+        {project.image_url && (
+          <div className="relative w-full max-w-4xl mx-auto mb-8">
+            <Image
+              src={project.image_url}
+              alt={project.title}
+              width={project.image_width ?? 1200}
+              height={project.image_height ?? 675}
+              sizes="(min-width: 896px) 896px, 100vw"
+              className="object-contain w-full h-full max-h-96 rounded-lg"
+            />
+          </div>
+        )}
 
         {/* Technologies Used */}
         <div className="flex flex-wrap gap-2 mb-8">
@@ -57,15 +63,15 @@ export default async function ProjectDetailsPage({ params }: Props) {
         </div>
 
         {/* Project Content */}
-        <div className="max-w-none mb-8">
-          <p className="text-lg text-gray-700">{project.content}</p>
+        <div className="prose prose-lg max-w-none mb-8 text-gray-700">
+          <MarkdownContent>{project.content_md}</MarkdownContent>
         </div>
 
         {/* Links Section */}
         <div className="flex gap-4">
-          {project.githubUrl && (
+          {project.github_url && (
             <a
-              href={project.githubUrl}
+              href={project.github_url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:text-blue-800 transition-colors"
@@ -73,9 +79,9 @@ export default async function ProjectDetailsPage({ params }: Props) {
               GitHub →
             </a>
           )}
-          {project.paperUrl && (
+          {project.paper_url && (
             <a
-              href={project.paperUrl}
+              href={project.paper_url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:text-blue-800 transition-colors"
@@ -83,9 +89,9 @@ export default async function ProjectDetailsPage({ params }: Props) {
               Paper →
             </a>
           )}
-          {project.demoUrl && (
+          {project.demo_url && (
             <a
-              href={project.demoUrl}
+              href={project.demo_url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:text-blue-800 transition-colors"

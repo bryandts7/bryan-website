@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ProjectGrid from "@/components/ProjectGrid";
 import Title from "@/components/title";
-import { projects } from "@/data/projects";
+import { getProjects } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -9,7 +9,9 @@ export const metadata: Metadata = {
     "A collection of my Data Science, Software Engineering, and Quant projects.",
 };
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const projects = await getProjects();
+
   return (
     <div className="grow bg-gray-50">
       <div className="text-center py-12">

@@ -1,7 +1,11 @@
 import Image from "next/image";
+import Markdown from "react-markdown";
 import MyFace from "@/assets/bryan_photo_new.jpg";
+import { getSiteContent } from "@/lib/content";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const aboutMe = await getSiteContent("about_me");
+
   return (
     <>
       {/* Main Title */}
@@ -20,42 +24,35 @@ export default function HomePage() {
           </h1>
 
           <div className="relative">
-            {/* Text content */}
-            <div className="text-left md:pr-72">
-              <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4">
-                My name is <b>Bryan Delton Tawarikh Sibarani (Bryan)</b>. I graduate with B.Sc from the Chinese University of Hong Kong Shenzhen
-                in <b>Data Science and Big Data Technology</b>. I am <b>working remotely</b> for a leading AdTech Analytics Company in US, <b>Pixalate</b>, as a <b>Junior Data Scientist</b>.
-                Currently I work through some projects, ranging from ML-Based Fraud Detection, Post-Bid Analytics, and  Agentic AI.
-              </p>
-
-              <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4">
-                As an <b>aspiring Data Scientist and AI Researcher</b>, I am passionate about solving complex problems and uncovering
-                valuable insights from data. I have hands-on experience with various machine learning tasks, including data
-                preprocessing, feature engineering, model building, and evaluation.
-              </p>
-
-              {/* Mobile image - only shown on small screens */}
-              <div className="block md:hidden w-full my-6">
-                <div className="mx-auto w-48 h-48 sm:w-56 sm:h-56">
-                  <Image
-                    className="rounded-full w-full h-full object-cover"
-                    src={MyFace}
-                    alt="Bryan Delton"
-                    sizes="224px"
-                  />
-                </div>
+            {/* Mobile image - only shown on small screens */}
+            <div className="block md:hidden w-full my-6">
+              <div className="mx-auto w-48 h-48 sm:w-56 sm:h-56">
+                <Image
+                  className="rounded-full w-full h-full object-cover"
+                  src={MyFace}
+                  alt="Bryan Delton"
+                  sizes="224px"
+                />
               </div>
+            </div>
 
-              <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4">
-                I am a dedicated team player, and I get along well with any team environment. I do well under pressure, which makes me
-                a good addition to any team. I also have strong command over <b>Data Structures &amp; Algorithms, Machine Learning,
-                Gen-AI</b>, and even in <b>Quant</b> related topics.
-              </p>
-
-              <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4">
-                Outside of work, I enjoy myself in various sports, including gym, football, and  badminton.
-                I am also interested in Public Policy, Finance, and Economics. Hit me up for any discussion.
-              </p>
+            {/* Text content (edited in the admin console, stored as Markdown) */}
+            <div className="text-left md:pr-72">
+              <Markdown
+                components={{
+                  p: ({ children }) => (
+                    <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4">{children}</p>
+                  ),
+                  strong: ({ children }) => <b>{children}</b>,
+                  a: ({ children, href }) => (
+                    <a href={href} className="text-blue-600 hover:underline">
+                      {children}
+                    </a>
+                  ),
+                }}
+              >
+                {aboutMe}
+              </Markdown>
             </div>
 
             {/* Desktop image - absolutely positioned to align with middle of paragraphs */}

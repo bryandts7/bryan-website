@@ -6,7 +6,7 @@ const sections = [
   { table: "posts", label: "Posts", href: "/admin/posts" },
   { table: "projects", label: "Projects", href: "/admin/projects" },
   { table: "experiences", label: "Experience entries", href: "/admin/experiences" },
-  { table: "comments", label: "Comments", href: null },
+  { table: "comments", label: "Comments", href: "/admin/comments" },
 ] as const;
 
 export default async function AdminHomePage() {
@@ -64,7 +64,6 @@ export default async function AdminHomePage() {
           Edit About me
         </Link>
       </div>
-      <p className="text-sm text-gray-500">Comment moderation arrives in the next phase.</p>
     </div>
   );
 }

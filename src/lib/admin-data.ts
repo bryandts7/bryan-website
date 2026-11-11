@@ -124,6 +124,31 @@ export async function adminGetExperience(id: string): Promise<AdminExperience | 
   return data;
 }
 
+export interface AdminComment {
+  id: string;
+  body: string;
+  status: "visible" | "hidden";
+  created_at: string;
+  parent_id: string | null;
+  post_id: string;
+  posts: { title: string; slug: string; status: string } | null;
+  profiles: { display_name: string } | null;
+}
+
+/** Newest first, hidden ones included (only the admin can read those). */
+export async function adminListComments(status: "all" | "visible" | "hidden" = "all") {
+  const supabase = await createSessionClient();
+  let query = supabase
+    .from("comments")
+    .select("id, body, status, created_at, parent_id, post_id, posts(title, slug, status), profiles(display_name)")
+    .order("created_at", { ascending: false })
+    .limit(200);
+  if (status !== "all") query = query.eq("status", status);
+  const { data, error } = await query.overrideTypes<AdminComment[], { merge: false }>();
+  if (error) fail("comments", error.message);
+  return data;
+}
+
 export async function adminGetAbout(): Promise<{ value_md: string; updated_at: string | null }> {
   const supabase = await createSessionClient();
   const { data, error } = await supabase

@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { supabaseEnv } from "./env";
 
 /**
@@ -8,6 +9,9 @@ import { supabaseEnv } from "./env";
  * Server only: Server Components, Server Functions and Route Handlers.
  */
 export async function createSessionClient() {
+  // Session checks read the clock (token expiry), so they must only run for a
+  // real request, never while Next.js prerenders or prefetches a page.
+  await connection();
   const cookieStore = await cookies();
   const { url, key } = supabaseEnv();
 

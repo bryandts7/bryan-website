@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import BackLink from "@/components/BackLink";
 import Blog from "@/components/blog";
+import CommentsSection, { CommentsSkeleton } from "@/components/comments/CommentsSection";
 import { formatDate, getPost, getPosts } from "@/lib/content";
 
 interface Props {
@@ -44,6 +46,12 @@ export default async function BlogPostPage({ params }: Props) {
         date={formatDate(post.published_at)}
         coverImageUrl={post.cover_image_url}
       />
+      <section id="comments" className="mx-auto max-w-3xl scroll-mt-24 border-t border-gray-200 px-4 py-10">
+        {/* Comments depend on who is visiting, so they stream in after the static post. */}
+        <Suspense fallback={<CommentsSkeleton />}>
+          <CommentsSection postId={post.id} slug={post.slug} />
+        </Suspense>
+      </section>
     </div>
   );
 }

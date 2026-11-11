@@ -1,3 +1,4 @@
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -59,9 +60,9 @@ export default function Footer() {
     </div>
     <div
       className="bg-neutral-300 p-4 text-center text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200">
-      <a href="/blogs" className='underline hover:underline-offset-4	'>
-      Read my Blog about Casual Mathematics Topics
-      </a>
+      <Link href="/blogs" className="underline hover:underline-offset-4">
+        Read my Blog about Casual Mathematics Topics
+      </Link>
     </div>
   </footer>
   );

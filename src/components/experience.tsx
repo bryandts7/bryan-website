@@ -1,8 +1,10 @@
-interface ExperienceProps {
+import Image, { type StaticImageData } from "next/image";
+
+export interface ExperienceProps {
   year: string;
   title: string;
   company: string;
-  logo?: string; // Optional since it might not always be provided
+  logo?: StaticImageData; // Optional since it might not always be provided
   details: string;
 }
 
@@ -29,9 +31,11 @@ function Experience({ year, title, company, logo, details }: ExperienceProps) {
             {company}
           </div>
           {logo && (
-            <img
+            <Image
               src={logo}
-              alt={`${title} logo`}
+              alt={`${company} logo`}
+              width={32}
+              height={32}
               className="w-8 h-8 object-contain"
             />
           )}

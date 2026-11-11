@@ -2,14 +2,7 @@ import tiktokLogo from '../assets/tiktok_logo.png';
 import ocbcLogo from '../assets/ocbc_logo.png'
 import finkuLogo from '../assets/finku_logo.png'
 import pixalateLogo from '../assets/pixalate_logo.png'
-
-interface ExperienceProps {
-    year: string;
-    title: string;
-    company: string;
-    logo?: string; // Optional since it might not always be provided
-    details: string;
- }
+import type { ExperienceProps } from '../components/experience';
 
 export const indExp: ExperienceProps[] = [
     {

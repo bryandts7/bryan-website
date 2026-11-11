@@ -1,10 +1,10 @@
-// src/components/ProjectCard.tsx
-import { Link } from 'react-router-dom';
+import Image, { type StaticImageData } from 'next/image';
+import Link from 'next/link';
 
 interface ProjectCardProps {
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrl: StaticImageData;
   technologies: string[];
   githubUrl?: string;
   paperUrl?: string;
@@ -27,10 +27,12 @@ const ProjectCard = ({
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
       <div className="relative h-48">
-        <img
+        <Image
           src={imageUrl}
           alt={title}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+          className="object-cover hover:scale-105 transition-transform duration-300"
         />
         {isInteractive && (
           <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
@@ -108,8 +110,8 @@ const ProjectCard = ({
             </a>
           )}
           
-          <Link 
-            to={`/portfolio/${id}`}
+          <Link
+            href={`/portfolio/${id}`}
             className="text-blue-600 hover:text-blue-800 transition-colors flex items-center"
           >
             <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

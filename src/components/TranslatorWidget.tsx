@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useCallback } from 'react';
 
 // Reuse the same translator logic class
@@ -89,7 +91,7 @@ class BahasaUnangTranslatorLogic {
     }
 
     const lastSyllable = syllables[syllables.length - 1];
-    let remainingSyllables = syllables.slice(0, -1);
+    const remainingSyllables = syllables.slice(0, -1);
 
     if (remainingSyllables.length > 0) {
       const secondLast = remainingSyllables[remainingSyllables.length - 1];
@@ -151,6 +153,9 @@ const TranslatorWidget: React.FC<TranslatorWidgetProps> = ({ className = '' }) =
   }, [inputText, translator]);
 
   React.useEffect(() => {
+    // Existing behaviour kept as-is during the Next.js migration; the output
+    // could be derived during render instead of set from an effect.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     translate();
   }, [translate]);
 
@@ -167,7 +172,7 @@ const TranslatorWidget: React.FC<TranslatorWidgetProps> = ({ className = '' }) =
           </label>
           <input
             type="text"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Type Indonesian text..."

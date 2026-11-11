@@ -1,4 +1,4 @@
-// src/config/projects.ts
+import type { StaticImageData } from 'next/image'
 import bhinnekaLogo from '../assets/projects/bhinneka.png'
 import effsegLogo from '../assets/projects/effseg.png'
 import whisperLogo from '../assets/projects/whisper.png'
@@ -15,7 +15,7 @@ export interface Project {
     id: string;
     title: string;
     description: string;
-    imageUrl: string;
+    imageUrl: StaticImageData;
     technologies: string[];
     githubUrl?: string;
     paperUrl?: string;

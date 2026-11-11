@@ -1,14 +1,7 @@
 import cuhkLogo from '../assets/cuhk_logo_2.png';
 import rabbitLogo from '../assets/rabbit_fund_logo.png';
+import type { ExperienceProps } from '../components/experience';
 
-interface ExperienceProps {
-    year: string;
-    title: string;
-    company: string;
-    logo?: string; // Optional since it might not always be provided
-    details: string;
- }
- 
 
 export const acExp: ExperienceProps[] = [
     {

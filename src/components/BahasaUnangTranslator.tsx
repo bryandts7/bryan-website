@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useCallback, useEffect } from 'react';
 
 class BahasaUnangTranslatorLogic {
@@ -88,7 +90,7 @@ class BahasaUnangTranslatorLogic {
     }
 
     const lastSyllable = syllables[syllables.length - 1];
-    let remainingSyllables = syllables.slice(0, -1);
+    const remainingSyllables = syllables.slice(0, -1);
 
     if (remainingSyllables.length > 0) {
       const secondLast = remainingSyllables[remainingSyllables.length - 1];
@@ -278,6 +280,9 @@ const BahasaUnangTranslator: React.FC = () => {
 
   // Auto-translate when input changes
   useEffect(() => {
+    // Existing behaviour kept as-is during the Next.js migration; the output
+    // could be derived during render instead of set from an effect.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     translate();
   }, [translate]);
 
@@ -294,7 +299,7 @@ const BahasaUnangTranslator: React.FC = () => {
     <div className="min-h-screen bg-white flex items-center justify-center p-5">
       <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-4xl border border-gray-200">
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-gray-800 mb-3 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold text-gray-800 mb-3 bg-linear-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
             Bahasa Unang Translator
           </h1>
           <p className="text-lg text-gray-600">
@@ -308,7 +313,7 @@ const BahasaUnangTranslator: React.FC = () => {
               {isIndonesianToUnang ? 'Indonesian' : 'Bahasa Unang'}
             </label>
             <textarea
-              className="w-full min-h-[150px] p-4 border-2 border-gray-200 rounded-xl text-base leading-relaxed resize-none transition-all duration-300 focus:outline-none focus:border-blue-500 focus:shadow-lg focus:shadow-blue-100 text-white bg-gray-800 placeholder-gray-400"
+              className="w-full min-h-[150px] p-4 border-2 border-gray-200 rounded-xl text-base leading-relaxed resize-none transition-all duration-300 focus:outline-hidden focus:border-blue-500 focus:shadow-lg focus:shadow-blue-100 text-white bg-gray-800 placeholder:text-gray-400"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Type your text here..."
@@ -319,7 +324,7 @@ const BahasaUnangTranslator: React.FC = () => {
 
           <div className="flex items-center justify-center">
             <button
-              className="bg-gradient-to-r from-blue-500 to-purple-600 border-none rounded-full w-12 h-12 text-white cursor-pointer transition-all duration-300 flex items-center justify-center text-lg hover:scale-110 hover:shadow-lg hover:shadow-blue-300"
+              className="bg-linear-to-r from-blue-500 to-purple-600 border-none rounded-full w-12 h-12 text-white cursor-pointer transition-all duration-300 flex items-center justify-center text-lg hover:scale-110 hover:shadow-lg hover:shadow-blue-300"
               onClick={swapLanguages}
               title="Swap languages"
             >
@@ -342,7 +347,7 @@ const BahasaUnangTranslator: React.FC = () => {
 
         <div className="flex flex-wrap gap-4 justify-center mb-8">
           <button
-            className="px-6 py-3 border-none rounded-lg text-base font-semibold cursor-pointer transition-all duration-300 uppercase tracking-wide bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-300"
+            className="px-6 py-3 border-none rounded-lg text-base font-semibold cursor-pointer transition-all duration-300 uppercase tracking-wide bg-linear-to-r from-blue-500 to-purple-600 text-white hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-300"
             onClick={translate}
             disabled={isLoading}
           >

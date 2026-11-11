@@ -1,74 +1,110 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import Markdown from "react-markdown";
 import MyFace from "@/assets/bryan_photo_new.jpg";
-import { getSiteContent } from "@/lib/content";
+import { GitHubIcon, LinkedInIcon } from "@/components/icons";
+import PostCard from "@/components/PostCard";
+import ProjectGrid from "@/components/ProjectGrid";
+import { buttonPrimary, buttonSecondary, Container, SectionHeading } from "@/components/ui";
+import { getExperiences, getPosts, getProjects, getSiteContent } from "@/lib/content";
+import { SITE_DESCRIPTION, SOCIAL_LINKS } from "@/lib/site";
+
+export const metadata: Metadata = {
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
+};
 
 export default async function HomePage() {
-  const aboutMe = await getSiteContent("about_me");
+  const [aboutMe, posts, projects, experiences] = await Promise.all([
+    getSiteContent("about_me"),
+    getPosts(),
+    getProjects(),
+    getExperiences(),
+  ]);
+
+  // The headline role is the first "Industry experience" entry (edit it in the admin console).
+  const current = experiences.find((entry) => entry.kind === "work");
+  const organization = current?.organization.replace(/\s*\(.*\)\s*$/, "");
 
   return (
     <>
-      {/* Main Title */}
-      <h1 className="font-pixelify-sans main-title text-center text-sm md:text-8xl mt-10 hidden md:block">
-        Bryan Delton
-      </h1>
-
-      {/* About Me Section */}
-      <section
-        id="aboutme"
-        className="relative px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 my-8 sm:my-12 md:my-16 lg:my-20"
-      >
-        <div className="max-w-4xl mx-auto">
-          <h1 className="about-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-left">
-            About Me
-          </h1>
-
-          <div className="relative">
-            {/* Mobile image - only shown on small screens */}
-            <div className="block md:hidden w-full my-6">
-              <div className="mx-auto w-48 h-48 sm:w-56 sm:h-56">
-                <Image
-                  className="rounded-full w-full h-full object-cover"
-                  src={MyFace}
-                  alt="Bryan Delton"
-                  sizes="224px"
-                />
-              </div>
-            </div>
-
-            {/* Text content (edited in the admin console, stored as Markdown) */}
-            <div className="text-left md:pr-72">
-              <Markdown
-                components={{
-                  p: ({ children }) => (
-                    <p className="text-xs sm:text-sm md:text-base lg:text-base mb-4">{children}</p>
-                  ),
-                  strong: ({ children }) => <b>{children}</b>,
-                  a: ({ children, href }) => (
-                    <a href={href} className="text-blue-600 hover:underline">
-                      {children}
-                    </a>
-                  ),
-                }}
-              >
-                {aboutMe}
-              </Markdown>
-            </div>
-
-            {/* Desktop image - absolutely positioned to align with middle of paragraphs */}
-            <div className="hidden md:block absolute top-1/2 right-0 -translate-y-1/2">
-              <div className="w-64 h-64 lg:w-72 lg:h-72">
-                <Image
-                  className="rounded-full w-full h-full object-cover"
-                  src={MyFace}
-                  alt="Bryan Delton"
-                  sizes="288px"
-                />
-              </div>
+      {/* Hero */}
+      <section className="border-b border-line">
+        <Container className="grid items-center gap-10 py-16 sm:py-20 md:grid-cols-[1fr_auto]">
+          <div>
+            <p className="text-sm font-semibold tracking-wide text-accent uppercase">Hi, I&apos;m</p>
+            <h1 className="mt-2 font-pixel text-4xl leading-tight text-ink sm:text-6xl lg:text-7xl">
+              <span className="typewriter">Bryan Delton</span>
+            </h1>
+            {current && (
+              <p className="mt-4 text-xl text-muted">
+                {current.title}
+                {organization && (
+                  <>
+                    {" "}at <span className="font-semibold text-ink">{organization}</span>
+                  </>
+                )}
+              </p>
+            )}
+            <p className="mt-3 max-w-xl text-muted">
+              Machine learning, fraud detection and quant. I also write about the mathematics behind them.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link href="/blogs" className={buttonPrimary}>
+                Read the blog
+              </Link>
+              <Link href="/portfolio" className={buttonSecondary}>
+                See projects
+              </Link>
+              <span className="flex items-center">
+                <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="rounded-lg p-2.5 text-muted transition-colors hover:text-ink">
+                  <GitHubIcon />
+                </a>
+                <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="rounded-lg p-2.5 text-muted transition-colors hover:text-ink">
+                  <LinkedInIcon />
+                </a>
+              </span>
             </div>
           </div>
-        </div>
+          {/* Photo first on phones, beside the text on wider screens. */}
+          <div className="order-first md:order-none">
+            <Image
+              src={MyFace}
+              alt="Bryan Delton"
+              priority
+              sizes="(min-width: 1024px) 288px, (min-width: 768px) 224px, 128px"
+              className="h-32 w-32 rounded-full object-cover shadow-xl ring-4 ring-surface md:h-56 md:w-56 lg:h-72 lg:w-72"
+            />
+          </div>
+        </Container>
       </section>
+
+      {/* About (edited in the admin console) */}
+      <Container className="py-16">
+        <SectionHeading title="About me" />
+        <div className="prose prose-zinc max-w-3xl dark:prose-invert prose-a:text-accent">
+          <Markdown>{aboutMe}</Markdown>
+        </div>
+      </Container>
+
+      {posts.length > 0 && (
+        <Container className="pb-16">
+          <SectionHeading title="Latest writing" href="/blogs" linkLabel="All posts" />
+          <div className="grid gap-4 md:grid-cols-3">
+            {posts.slice(0, 3).map((post) => (
+              <PostCard key={post.slug} post={post} headingLevel="h3" />
+            ))}
+          </div>
+        </Container>
+      )}
+
+      {projects.length > 0 && (
+        <Container className="pb-8">
+          <SectionHeading title="Selected projects" href="/portfolio" linkLabel="All projects" />
+          <ProjectGrid projects={projects.slice(0, 3)} headingLevel="h3" />
+        </Container>
+      )}
     </>
   );
 }

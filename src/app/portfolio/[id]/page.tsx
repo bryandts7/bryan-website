@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import BackLink from "@/components/BackLink";
+import { articleProse } from "@/components/blog";
+import { DocumentIcon, ExternalIcon, GitHubIcon } from "@/components/icons";
 import MarkdownContent from "@/components/MarkdownContent";
-import Title from "@/components/title";
+import { buttonPrimary, buttonSecondary, Container, Tag } from "@/components/ui";
 import { getProject, getProjects } from "@/lib/content";
+import { OPEN_GRAPH_DEFAULTS } from "@/lib/site";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -19,7 +23,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const project = await getProject(id);
   if (!project) return {};
-  return { title: project.title, description: project.description };
+  return {
+    title: project.title,
+    description: project.description,
+    alternates: { canonical: `/portfolio/${project.slug}` },
+    // Page-level openGraph replaces the layout's, so the shared fields are repeated.
+    openGraph: {
+      ...OPEN_GRAPH_DEFAULTS,
+      title: project.title,
+      description: project.description,
+      url: `/portfolio/${project.slug}`,
+      images: project.image_url ? [project.image_url] : undefined,
+    },
+  };
 }
 
 export default async function ProjectDetailsPage({ params }: Props) {
@@ -27,80 +43,65 @@ export default async function ProjectDetailsPage({ params }: Props) {
   const project = await getProject(id);
   if (!project) notFound();
 
+  const demoIsInternal = project.demo_url?.startsWith("/") ?? false;
+
   return (
-    <div className="grow bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
-        <div>
-          <BackLink href="/portfolio">Back to Projects</BackLink>
-        </div>
+    <Container size="narrow" className="pt-8">
+      <BackLink href="/portfolio">All projects</BackLink>
 
-        <Title>{project.title}</Title>
-
-        {/* Image Container with constrained size */}
-        {project.image_url && (
-          <div className="relative w-full max-w-4xl mx-auto mb-8">
-            <Image
-              src={project.image_url}
-              alt={project.title}
-              width={project.image_width ?? 1200}
-              height={project.image_height ?? 675}
-              sizes="(min-width: 896px) 896px, 100vw"
-              className="object-contain w-full h-full max-h-96 rounded-lg"
-            />
+      <header className="pt-8 pb-8">
+        <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">{project.title}</h1>
+        {project.description && <p className="mt-3 text-lg text-muted">{project.description}</p>}
+        {project.technologies.length > 0 && (
+          <div className="mt-5 flex flex-wrap gap-1.5">
+            {project.technologies.map((tech) => (
+              <Tag key={tech}>{tech}</Tag>
+            ))}
           </div>
         )}
-
-        {/* Technologies Used */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {project.technologies.map((tech) => (
-            <span
-              key={tech}
-              className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        {/* Project Content */}
-        <div className="prose prose-lg max-w-none mb-8 text-gray-700">
-          <MarkdownContent>{project.content_md}</MarkdownContent>
-        </div>
-
-        {/* Links Section */}
-        <div className="flex gap-4">
+        <div className="mt-6 flex flex-wrap gap-3">
+          {project.demo_url &&
+            (demoIsInternal ? (
+              <Link href={project.demo_url} className={buttonPrimary}>
+                {project.is_interactive ? "Try it" : "Demo"}
+              </Link>
+            ) : (
+              <a href={project.demo_url} target="_blank" rel="noopener noreferrer" className={buttonPrimary}>
+                <ExternalIcon /> Demo
+              </a>
+            ))}
           {project.github_url && (
-            <a
-              href={project.github_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 transition-colors"
-            >
-              GitHub →
+            <a href={project.github_url} target="_blank" rel="noopener noreferrer" className={buttonSecondary}>
+              <GitHubIcon className="h-4 w-4" /> Code
             </a>
           )}
           {project.paper_url && (
-            <a
-              href={project.paper_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 transition-colors"
-            >
-              Paper →
-            </a>
-          )}
-          {project.demo_url && (
-            <a
-              href={project.demo_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 transition-colors"
-            >
-              Demo →
+            <a href={project.paper_url} target="_blank" rel="noopener noreferrer" className={buttonSecondary}>
+              <DocumentIcon /> Paper
             </a>
           )}
         </div>
-      </div>
-    </div>
+      </header>
+
+      {project.image_url && (
+        <div className="mb-10 overflow-hidden rounded-xl border border-line bg-surface">
+          <Image
+            src={project.image_url}
+            alt={project.title}
+            width={project.image_width ?? 1200}
+            height={project.image_height ?? 675}
+            priority
+            sizes="(min-width: 768px) 720px, 100vw"
+            className="mx-auto max-h-[28rem] w-full object-contain"
+          />
+        </div>
+      )}
+
+      {project.content_md.trim() && (
+        <div className={articleProse}>
+          <MarkdownContent>{project.content_md}</MarkdownContent>
+        </div>
+      )}
+    </Container>
   );
 }

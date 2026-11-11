@@ -1,23 +1,31 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 type State =
   | { status: "loading" }
   | { status: "ready"; svg: string }
   | { status: "failed" };
 
+/** Dark theme when the visitor uses dark mode, except inside the always-light admin. */
+function prefersDark(element: HTMLElement | null): boolean {
+  if (element?.closest(".light-only")) return false;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
 export default function Mermaid({ chart }: { chart: string }) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<State>({ status: "loading" });
 
   useEffect(() => {
     let cancelled = false;
+    const dark = prefersDark(ref.current);
 
     // Loaded on demand so the library is only downloaded on posts with a diagram.
     import("mermaid")
       .then(async ({ default: mermaid }) => {
-        mermaid.initialize({ startOnLoad: false });
+        mermaid.initialize({ startOnLoad: false, theme: dark ? "dark" : "default" });
         const { svg } = await mermaid.render(`mermaid-${id}`, chart);
         if (!cancelled) setState({ status: "ready", svg });
       })
@@ -30,15 +38,6 @@ export default function Mermaid({ chart }: { chart: string }) {
     };
   }, [chart, id]);
 
-  if (state.status === "ready") {
-    return (
-      <div
-        className="not-prose my-6 flex justify-center overflow-x-auto"
-        dangerouslySetInnerHTML={{ __html: state.svg }}
-      />
-    );
-  }
-
   if (state.status === "failed") {
     return (
       <pre>
@@ -48,8 +47,12 @@ export default function Mermaid({ chart }: { chart: string }) {
   }
 
   return (
-    <div className="not-prose my-6 text-center text-sm text-gray-500">
-      Loading diagram…
+    <div ref={ref} className="not-prose my-6 flex justify-center overflow-x-auto">
+      {state.status === "ready" ? (
+        <div dangerouslySetInnerHTML={{ __html: state.svg }} />
+      ) : (
+        <span className="text-sm text-subtle">Loading diagram…</span>
+      )}
     </div>
   );
 }

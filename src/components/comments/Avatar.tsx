@@ -22,7 +22,7 @@ export default function Avatar({ name, url, size = 36 }: { name: string; url: st
         alt=""
         width={size}
         height={size}
-        className="shrink-0 rounded-full bg-gray-100"
+        className="shrink-0 rounded-full bg-surface"
         style={{ width: size, height: size }}
       />
     );
@@ -39,7 +39,7 @@ export default function Avatar({ name, url, size = 36 }: { name: string; url: st
   return (
     <span
       aria-hidden
-      className="flex shrink-0 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold text-gray-600"
+      className="flex shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-muted"
       style={{ width: size, height: size }}
     >
       {initials}

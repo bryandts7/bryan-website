@@ -1,4 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
+import { readingMinutes } from "./site";
 import { createPublicClient } from "./supabase/public";
 
 // Public content, read from Supabase and cached by Next.js.
@@ -8,14 +9,16 @@ export interface PostSummary {
   slug: string;
   title: string;
   excerpt: string;
+  tags: string[];
   published_at: string | null;
+  updated_at: string;
+  reading_minutes: number;
 }
 
 export interface Post extends PostSummary {
   id: string;
   content_md: string;
   cover_image_url: string | null;
-  tags: string[];
 }
 
 export interface Project {
@@ -32,6 +35,7 @@ export interface Project {
   paper_url: string | null;
   demo_url: string | null;
   is_interactive: boolean;
+  updated_at: string;
 }
 
 export interface Experience {
@@ -55,11 +59,15 @@ export async function getPosts(): Promise<PostSummary[]> {
 
   const { data, error } = await createPublicClient()
     .from("posts")
-    .select("slug, title, excerpt, published_at")
+    .select("slug, title, excerpt, tags, published_at, updated_at, content_md")
     .eq("status", "published")
     .order("published_at", { ascending: false });
   if (error) fail("posts", error.message);
-  return data;
+  // The full text is only read to work out the reading time.
+  return data.map(({ content_md, ...post }) => ({
+    ...post,
+    reading_minutes: readingMinutes(content_md),
+  }));
 }
 
 export async function getPost(slug: string): Promise<Post | null> {
@@ -69,16 +77,16 @@ export async function getPost(slug: string): Promise<Post | null> {
 
   const { data, error } = await createPublicClient()
     .from("posts")
-    .select("id, slug, title, excerpt, content_md, cover_image_url, tags, published_at")
+    .select("id, slug, title, excerpt, content_md, cover_image_url, tags, published_at, updated_at")
     .eq("status", "published")
     .eq("slug", slug)
     .maybeSingle();
   if (error) fail(`post "${slug}"`, error.message);
-  return data;
+  return data ? { ...data, reading_minutes: readingMinutes(data.content_md) } : null;
 }
 
 const PROJECT_COLUMNS =
-  "id, slug, title, description, content_md, image_url, image_width, image_height, technologies, github_url, paper_url, demo_url, is_interactive";
+  "id, slug, title, description, content_md, image_url, image_width, image_height, technologies, github_url, paper_url, demo_url, is_interactive, updated_at";
 
 export async function getProjects(): Promise<Project[]> {
   "use cache";

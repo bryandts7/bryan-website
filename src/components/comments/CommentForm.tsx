@@ -51,13 +51,13 @@ export default function CommentForm({
         rows={parentId ? 3 : 4}
         autoFocus={autoFocus}
         aria-label={parentId ? "Reply" : "Comment"}
-        className="block w-full resize-y rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-xs focus:border-blue-500 focus:outline-hidden focus:ring-2 focus:ring-blue-200"
+        className="block w-full resize-y rounded-md border border-line bg-card px-3 py-2 text-sm text-ink shadow-xs focus:border-accent focus:outline-hidden focus:ring-2 focus:ring-accent/30"
       />
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="submit"
           disabled={pending || !length || tooLong}
-          className="rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-md bg-ink px-4 py-2 text-sm font-semibold text-page transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {pending ? "Posting…" : submitLabel}
         </button>
@@ -65,17 +65,17 @@ export default function CommentForm({
           <button
             type="button"
             onClick={onDone}
-            className="text-sm text-gray-600 hover:text-gray-900"
+            className="text-sm text-muted hover:text-ink"
           >
             Cancel
           </button>
         )}
-        <span className={`ml-auto text-xs ${tooLong ? "text-red-600" : "text-gray-400"}`}>
+        <span className={`ml-auto text-xs ${tooLong ? "text-red-600 dark:text-red-400" : "text-subtle"}`}>
           {length.toLocaleString("en-US")} / {COMMENT_MAX_LENGTH.toLocaleString("en-US")}
         </span>
       </div>
       {error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
           {error}
         </p>
       )}

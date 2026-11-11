@@ -45,13 +45,13 @@ export default function LoginButtons() {
           type="button"
           onClick={() => signIn(id)}
           disabled={pending !== null}
-          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 font-medium text-gray-800 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-lg border border-line bg-card px-4 py-3 font-medium text-ink transition-colors hover:bg-surface disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending === id ? "Redirecting…" : label}
         </button>
       ))}
       {error && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
           {error}
         </p>
       )}

@@ -1,8 +1,77 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* Keep the Tailwind v3 defaults the existing markup was written against. */
+/*
+ * Colour tokens. Components use these names (bg-page, text-ink, border-line,
+ * text-accent, ...) instead of fixed colours, so the whole site follows the
+ * visitor's light/dark setting.
+ */
+:root {
+  --page: #ffffff;
+  --ink: #18181b;
+  --muted: #52525b;
+  --subtle: #8b8b94;
+  --card: #ffffff;
+  --surface: #f4f4f5;
+  --line: #e4e4e7;
+  --accent: #2563eb;
+  --accent-ink: #ffffff;
+  --accent-soft: #eff6ff;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0b0b0e;
+    --ink: #f4f4f5;
+    --muted: #a1a1aa;
+    --subtle: #71717a;
+    --card: #141418;
+    --surface: #1c1c21;
+    --line: #2a2a31;
+    --accent: #60a5fa;
+    --accent-ink: #0b0b0e;
+    --accent-soft: #172033;
+    color-scheme: dark;
+  }
+}
+
+/* The admin console is always light (its forms use fixed light colours). */
+.light-only {
+  --page: #f9fafb;
+  --ink: #18181b;
+  --muted: #52525b;
+  --subtle: #8b8b94;
+  --card: #ffffff;
+  --surface: #f4f4f5;
+  --line: #e4e4e7;
+  --accent: #2563eb;
+  --accent-ink: #ffffff;
+  --accent-soft: #eff6ff;
+  color-scheme: light;
+  background-color: var(--page);
+  color: var(--ink);
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-card: var(--card);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-pixel: var(--font-pixelify), ui-sans-serif, sans-serif;
+}
+
 @layer base {
+  /* Tailwind v3 defaults the existing markup relies on. */
   *,
   ::after,
   ::before,
@@ -15,92 +84,61 @@
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--page);
+    color: var(--ink);
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--accent) 25%, transparent);
+  }
 }
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: black;
-  background-color: white;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
+/* Kept for older markup (translator, admin) that still uses this class. */
 .font-pixelify-sans {
-  font-family: var(--font-pixelify), sans-serif;
+  font-family: var(--font-pixel);
   font-size: x-large;
 }
 
-/* Home page: typewriter title */
-.main-title {
-  font-size: 6.5em;
-  white-space: nowrap;
+/* Home page: the name types itself once, then the cursor keeps blinking. */
+.typewriter {
+  display: inline-block;
   overflow: hidden;
-  border-right: 0.15em solid black; /* cursor */
-  width: fit-content;
-  text-align: center;
-  margin: 0 auto;
+  white-space: nowrap;
+  border-right: 0.08em solid currentColor;
+  width: 12ch;
   animation:
-    typing 4s steps(20, end),
-    blink-caret 0.75s,
-    erase 4s steps(20, end);
-  animation-iteration-count: infinite;
+    typing 1.6s steps(12, end) both,
+    caret 0.8s step-end infinite;
 }
 
 @keyframes typing {
-  0% {
-    width: 0;
-  }
-  50% {
-    width: 100%;
-  }
-  60% {
-    width: 100%;
-  }
-}
-
-@keyframes erase {
-  0% {
-    width: 50%;
-  }
-  50% {
-    width: 0;
-  }
-  60% {
+  from {
     width: 0;
   }
 }
 
-@keyframes blink-caret {
-  from,
-  to {
+@keyframes caret {
+  50% {
     border-color: transparent;
   }
-  50% {
-    border-color: black;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-}
-
-/* Home page: "About Me" heading */
-.about-heading {
-  font-size: 36px;
-  border-bottom: 2px solid rgb(168, 164, 164);
-}
-
-@media screen and (min-width: 3840px) {
-  .about-heading {
-    font-size: 32px;
-  }
-}
-
-@media screen and (min-width: 1050px) and (max-width: 1178px) {
-  .about-heading {
-    font-size: 25px;
+  .typewriter {
+    animation: none;
+    border-right-color: transparent;
   }
 }

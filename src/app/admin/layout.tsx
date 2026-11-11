@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="grow bg-gray-50">
-      <div className="mx-auto max-w-6xl px-4 py-8">
+    <div className="grow light-only">
+      <div className="mx-auto max-w-6xl px-4 py-8 text-gray-900">
         <Suspense fallback={<p className="text-sm text-gray-500">Checking access…</p>}>
           <AdminGate>{children}</AdminGate>
         </Suspense>

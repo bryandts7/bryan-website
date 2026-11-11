@@ -296,7 +296,7 @@ const BahasaUnangTranslator: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-5">
+    <div className="flex items-center justify-center px-4 py-12 sm:px-6">
       <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-4xl border border-gray-200">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-gray-800 mb-3 bg-linear-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">

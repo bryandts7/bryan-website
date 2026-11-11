@@ -31,8 +31,8 @@ export default async function CommentsSection({ postId, slug }: { postId: string
 export function CommentsSkeleton() {
   return (
     <div className="space-y-4" aria-busy>
-      <div className="h-7 w-40 rounded bg-gray-100" />
-      <div className="h-24 rounded-lg bg-gray-50" />
+      <div className="h-7 w-40 rounded bg-surface" />
+      <div className="h-24 rounded-lg bg-surface" />
     </div>
   );
 }

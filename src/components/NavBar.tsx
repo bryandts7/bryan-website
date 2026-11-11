@@ -1,106 +1,110 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { Suspense, useState } from "react";
 
 const links = [
-  { href: "/", label: "About Me" },
-  { href: "/experiences", label: "Experiences" },
+  { href: "/", label: "About" },
+  { href: "/experiences", label: "Experience" },
   { href: "/portfolio", label: "Projects" },
   { href: "/blogs", label: "Blog" },
 ];
 
+function isActive(pathname: string | null, href: string) {
+  if (pathname === null) return false;
+  if (href === "/") return pathname === "/";
+  if (href === "/blogs") return pathname === "/blogs" || pathname.startsWith("/blog/");
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+/**
+ * The current address is only known at request time, so the navbar first
+ * renders without an active link (part of the static page) and the highlight
+ * streams in once the address is available.
+ */
 export default function NavBar() {
+  return (
+    <Suspense fallback={<NavBarView pathname={null} />}>
+      <NavBarWithPath />
+    </Suspense>
+  );
+}
+
+function NavBarWithPath() {
+  return <NavBarView pathname={usePathname()} />;
+}
+
+function NavBarView({ pathname }: { pathname: string | null }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 mb-5 bg-gray-900 text-white shadow-md">
-      <div className="flex h-16 items-center justify-between px-6 md:px-12">
-        <Link href="/" className="font-pixelify-sans">
+    <header className="sticky top-0 z-50 border-b border-line bg-page/80 backdrop-blur supports-[backdrop-filter]:bg-page/70">
+      <nav className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 sm:px-6" aria-label="Main">
+        <Link href="/" className="font-pixel text-xl text-ink" onClick={() => setOpen(false)}>
           Bryan Delton
         </Link>
 
-        {/* Desktop menu */}
-        <ul className="hidden h-full md:flex">
-          {links.map(({ href, label }) => (
-            <li key={href} className="h-full">
-              <Link
-                href={href}
-                className="flex h-full items-center px-5 text-sm transition-colors duration-300 hover:bg-white hover:text-black"
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
+        {/* Desktop */}
+        <ul className="hidden items-center gap-1 md:flex">
+          {links.map(({ href, label }) => {
+            const active = isActive(pathname, href);
+            return (
+              <li key={href}>
+                <Link
+                  href={href}
+                  aria-current={active ? "page" : undefined}
+                  className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                    active ? "bg-surface text-ink" : "text-muted hover:text-ink"
+                  }`}
+                >
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
-        {/* Mobile menu button */}
+        {/* Mobile */}
         <button
           type="button"
-          className="p-2 md:hidden"
-          aria-label="Open menu"
+          className="-mr-2 rounded-md p-2 text-ink md:hidden"
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
-          onClick={() => setOpen(true)}
+          aria-controls="mobile-menu"
+          onClick={() => setOpen((value) => !value)}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+            {open ? (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+            )}
           </svg>
         </button>
-      </div>
+      </nav>
 
-      {/* Mobile drawer */}
       {open && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <button
-            type="button"
-            className="absolute inset-0 h-full w-full cursor-default bg-black/50"
-            aria-label="Close menu"
-            onClick={() => setOpen(false)}
-          />
-          <div className="absolute inset-y-0 left-0 flex w-72 max-w-[80%] flex-col bg-gray-900 shadow-xl">
-            <div className="flex h-16 items-center justify-between border-b border-gray-700 px-6">
-              <span className="font-semibold">Menu</span>
-              <button
-                type="button"
-                className="p-2"
-                aria-label="Close menu"
-                onClick={() => setOpen(false)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
+        <ul id="mobile-menu" className="border-t border-line bg-page px-4 py-2 md:hidden">
+          {links.map(({ href, label }) => {
+            const active = isActive(pathname, href);
+            return (
+              <li key={href}>
+                <Link
+                  href={href}
+                  aria-current={active ? "page" : undefined}
+                  onClick={() => setOpen(false)}
+                  className={`block rounded-md px-3 py-3 text-base font-medium ${
+                    active ? "bg-surface text-ink" : "text-muted hover:text-ink"
+                  }`}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
-                </svg>
-              </button>
-            </div>
-            <ul>
-              {links.map(({ href, label }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="block px-6 py-4 transition-colors duration-300 hover:bg-white hover:text-black"
-                    onClick={() => setOpen(false)}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       )}
-    </nav>
+    </header>
   );
 }

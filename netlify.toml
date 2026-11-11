@@ -4,3 +4,8 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# Netlify's Next.js runtime: without it the build folder is published as plain
+# static files and every address returns 404.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

@@ -1,30 +1,47 @@
-# React + TypeScript + Vite
+# bryan-website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal website of Bryan Delton Tawarikh Sibarani: about me, experience, projects, a blog with comments, and the Bahasa Unang translator. Content is edited in the admin console at `/admin`.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Next.js 16 (App Router, Cache Components) + React 19 + TypeScript
+- Tailwind CSS 4 with the typography plugin; follows the visitor's light/dark setting
+- Supabase: Postgres (posts, projects, experience, About-me text, comments), Auth (GitHub and Google sign-in), Storage (images)
+- Markdown with KaTeX (math) and Mermaid (diagrams)
+- Deployed on Netlify (`netlify.toml`)
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Create `.env.local` (never committed) with the project's public values:
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+NEXT_PUBLIC_SITE_URL=https://bryandts.netlify.app
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+The same variables must be set in Netlify. The database schema and access rules are in `supabase/migrations/0001_init.sql` (run once in the Supabase SQL Editor). Admin rights are given in the SQL Editor only:
+
+```sql
+update public.profiles set role = 'admin'
+where id = (select id from auth.users where email = 'you@example.com');
+```
+
+## Commands
+
+```bash
+npm install     # install dependencies
+npm run dev     # local dev server on http://localhost:3000
+npm run build   # production build
+npm run lint    # ESLint
+```
+
+## Layout
+
+| Path | What it holds |
+|---|---|
+| `src/app` | Public pages, `/admin`, `/login`, sitemap, robots, RSS (`/feed.xml`), link-preview images |
+| `src/app/admin/actions.ts`, `src/app/comments/actions.ts` | Every write; each checks the caller before the database checks again |
+| `src/components` | Shared UI; `admin/` for the console, `comments/` for the comment thread |
+| `src/lib` | Supabase clients, cached content readers, auth helpers, dates, site settings |
+| `supabase/migrations` | Database schema, row-level security, storage bucket |

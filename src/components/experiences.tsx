@@ -1,40 +1,31 @@
-import {indExp} from '../data/experience';
-import {acExp} from '../data/academic';
-import Experience from '../components/experience';
-import Title from '../components/title';
+import type { Experience as ExperienceRow } from "@/lib/content";
+import Experience from "./experience";
 
-function Experiences() {
-   return (
-    <div className="flex flex-col md:flex-row justify-center my-20 space-y-10 md:space-y-0 md:space-x-10">
-         <div className="w-full md:w-1/2 px-20">
-            <Title>Industry Experience</Title>
-            {indExp.map((item, index) => (
-               <Experience 
-                  key={index}
-                  year={item.year}
-                  title={item.title}
-                  company={item.company}
-                  logo={item.logo}
-                  details={item.details}
-               />
-            ))}
-         </div>
-         <div className="w-full md:w-1/2 px-20">
-            <Title>Academia Experience</Title>
-            {acExp.map((item, index) => (
-               <Experience 
-                  key={index}
-                  year={item.year}
-                  title={item.title}
-                  company={item.company}
-                  logo={item.logo}
-                  details={item.details}
-               />
-            ))}
-         </div>
-      </div>
-    
-   )
+function Column({ heading, items }: { heading: string; items: ExperienceRow[] }) {
+  return (
+    <section>
+      <h2 className="mb-6 text-xl font-bold tracking-tight text-ink">{heading}</h2>
+      <ol className="relative space-y-8 border-l border-line pl-6">
+        {items.map((item) => (
+          <Experience
+            key={item.id}
+            year={item.period}
+            title={item.title}
+            company={item.organization}
+            logo={item.logo_url}
+            details={item.details}
+          />
+        ))}
+      </ol>
+    </section>
+  );
 }
 
-export default Experiences;
+export default function Experiences({ experiences }: { experiences: ExperienceRow[] }) {
+  return (
+    <div className="grid gap-12 md:grid-cols-2">
+      <Column heading="Industry" items={experiences.filter((item) => item.kind === "work")} />
+      <Column heading="Academia" items={experiences.filter((item) => item.kind === "academic")} />
+    </div>
+  );
+}

@@ -1,107 +1,49 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useRef } from "react";
-import ReactMarkdown from "react-markdown";
-import rehypeKatex from "rehype-katex";
-import remarkMath from "remark-math";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import mermaid from "mermaid";
-import "katex/dist/katex.min.css";
+import Image from "next/image";
+import MarkdownContent from "./MarkdownContent";
+import { Tag } from "./ui";
 
 interface BlogProps {
-  content: string;
   title: string;
+  content: string;
+  date?: string | null;
+  isoDate?: string | null;
+  readingMinutes?: number;
+  tags?: string[];
+  coverImageUrl?: string | null;
 }
 
-interface CodeProps {
-  node?: any;
-  inline?: boolean;
-  className?: string;
-  children?: React.ReactNode;
+/** Shared article typography: readable line length, dark-mode aware. */
+export const articleProse =
+  "prose prose-zinc max-w-none sm:prose-lg dark:prose-invert prose-headings:tracking-tight prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-pre:border prose-pre:border-line prose-code:before:content-none prose-code:after:content-none";
+
+function Blog({ title, content, date, isoDate, readingMinutes, tags = [], coverImageUrl }: BlogProps) {
+  return (
+    <article>
+      <header className="pt-8 pb-8">
+        <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl sm:leading-tight">{title}</h1>
+        <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2 text-sm text-subtle">
+          {date && <time dateTime={isoDate ?? undefined}>{date}</time>}
+          {date && readingMinutes && <span aria-hidden>·</span>}
+          {readingMinutes && <span>{readingMinutes} min read</span>}
+          {tags.length > 0 && (
+            <span className="flex flex-wrap gap-1.5 sm:ml-2">
+              {tags.map((tag) => (
+                <Tag key={tag}>{tag}</Tag>
+              ))}
+            </span>
+          )}
+        </div>
+      </header>
+      {coverImageUrl && (
+        <div className="relative mb-10 aspect-[2/1] w-full overflow-hidden rounded-xl bg-surface">
+          <Image src={coverImageUrl} alt="" fill priority sizes="(min-width: 768px) 720px, 100vw" className="object-cover" />
+        </div>
+      )}
+      <div className={articleProse}>
+        <MarkdownContent>{content}</MarkdownContent>
+      </div>
+    </article>
+  );
 }
-
-const Mermaid: React.FC<{ chart: string }> = ({ chart }) => {
-  const mermaidRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (mermaidRef.current) {
-      mermaid.initialize({ startOnLoad: true });
-      mermaid.contentLoaded();
-    }
-  }, [chart]);
-
-  return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <div className="mermaid" ref={mermaidRef}>
-        {chart}
-      </div>
-    </div>
-  );
-};
-
-const Blog: React.FC<BlogProps> = ({ content, title }) => {
-  return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-6">{title}</h1>
-      <div className="prose prose-lg">
-        <ReactMarkdown
-          remarkPlugins={[remarkMath, remarkGfm]}
-          rehypePlugins={[rehypeKatex, rehypeRaw]}
-          components={{
-            h1: ({ node, ...props }) => (
-              <h1 className="text-3xl font-bold mt-8 mb-4" {...props} />
-            ),
-            h2: ({ node, ...props }) => (
-              <h2 className="text-2xl font-bold mt-6 mb-3" {...props} />
-            ),
-            h3: ({ node, ...props }) => (
-              <h3 className="text-xl font-bold mt-4 mb-2" {...props} />
-            ),
-            ul: ({ node, ...props }) => (
-              <ul className="list-disc list-outside ml-6 my-4" {...props} />
-            ),
-            ol: ({ node, ...props }) => (
-              <ol className="list-decimal list-outside ml-6 my-4" {...props} />
-            ),
-            li: ({ node, ...props }) => <li className="mb-1" {...props} />,
-            p: ({ node, ...props }) => <p className="mb-4" {...props} />,
-            a: ({ node, ...props }) => (
-              <a className="text-blue-600 hover:underline" {...props} />
-            ),
-            blockquote: ({ node, ...props }) => (
-              <blockquote
-                className="border-l-4 border-gray-300 pl-4 italic my-4"
-                {...props}
-              />
-            ),
-            code: ({ node, inline, className, children, ...props }: CodeProps) => {
-              const match = /language-(\w+)/.exec(className || "");
-              if (!inline && match) {
-                const language = match[1];
-                if (language === "mermaid") {
-                  return <Mermaid chart={String(children)} />;
-                }
-                return (
-                  <pre className="bg-gray-100 rounded p-4 my-4 overflow-x-auto">
-                    <code className={className} {...props}>
-                      {children}
-                    </code>
-                  </pre>
-                );
-              }
-              return (
-                <code className="bg-gray-100 rounded px-1 py-0.5" {...props}>
-                  {children}
-                </code>
-              );
-            },
-          }}
-        >
-          {content}
-        </ReactMarkdown>
-      </div>
-    </div>
-  );
-};
 
 export default Blog;

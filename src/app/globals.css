@@ -1,0 +1,144 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/*
+ * Colour tokens. Components use these names (bg-page, text-ink, border-line,
+ * text-accent, ...) instead of fixed colours, so the whole site follows the
+ * visitor's light/dark setting.
+ */
+:root {
+  --page: #ffffff;
+  --ink: #18181b;
+  --muted: #52525b;
+  --subtle: #8b8b94;
+  --card: #ffffff;
+  --surface: #f4f4f5;
+  --line: #e4e4e7;
+  --accent: #2563eb;
+  --accent-ink: #ffffff;
+  --accent-soft: #eff6ff;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0b0b0e;
+    --ink: #f4f4f5;
+    --muted: #a1a1aa;
+    --subtle: #71717a;
+    --card: #141418;
+    --surface: #1c1c21;
+    --line: #2a2a31;
+    --accent: #60a5fa;
+    --accent-ink: #0b0b0e;
+    --accent-soft: #172033;
+    color-scheme: dark;
+  }
+}
+
+/* The admin console is always light (its forms use fixed light colours). */
+.light-only {
+  --page: #f9fafb;
+  --ink: #18181b;
+  --muted: #52525b;
+  --subtle: #8b8b94;
+  --card: #ffffff;
+  --surface: #f4f4f5;
+  --line: #e4e4e7;
+  --accent: #2563eb;
+  --accent-ink: #ffffff;
+  --accent-soft: #eff6ff;
+  color-scheme: light;
+  background-color: var(--page);
+  color: var(--ink);
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-card: var(--card);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-pixel: var(--font-pixelify), ui-sans-serif, sans-serif;
+}
+
+@layer base {
+  /* Tailwind v3 defaults the existing markup relies on. */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--page);
+    color: var(--ink);
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+}
+
+/* Kept for older markup (translator, admin) that still uses this class. */
+.font-pixelify-sans {
+  font-family: var(--font-pixel);
+  font-size: x-large;
+}
+
+/* Home page: the name types itself once, then the cursor keeps blinking. */
+.typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.08em solid currentColor;
+  width: 12ch;
+  animation:
+    typing 1.6s steps(12, end) both,
+    caret 0.8s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes caret {
+  50% {
+    border-color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .typewriter {
+    animation: none;
+    border-right-color: transparent;
+  }
+}

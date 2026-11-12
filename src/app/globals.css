@@ -128,7 +128,11 @@
   }
 }
 
-/* Home page: the name types itself once, then the cursor keeps blinking. */
+/*
+ * Home page: the name types itself, stays for a moment, erases itself, and
+ * starts again. The cursor keeps blinking throughout. steps(12) applies to each
+ * keyframe segment, so typing and erasing both go one letter at a time.
+ */
 .typewriter {
   display: inline-block;
   overflow: hidden;
@@ -136,12 +140,24 @@
   border-right: 0.08em solid currentColor;
   width: 12ch;
   animation:
-    typing 1.6s steps(12, end) both,
+    typing 7s steps(12, end) infinite,
     caret 0.8s step-end infinite;
 }
 
 @keyframes typing {
-  from {
+  0% {
+    width: 0;
+  } /* type: 0 – 1.6s */
+  23% {
+    width: 12ch;
+  } /* hold: 1.6 – 5s */
+  71% {
+    width: 12ch;
+  } /* erase: 5 – 6.2s */
+  89% {
+    width: 0;
+  } /* pause, then repeat */
+  100% {
     width: 0;
   }
 }

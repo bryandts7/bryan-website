@@ -1,33 +1,30 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { signOut } from "@/app/auth/actions";
 import { deleteComment, setCommentHidden } from "@/app/comments/actions";
 import type { PublicComment } from "@/lib/comments";
 import { formatDateTime } from "@/lib/dates";
+import { createBrowserSupabase } from "@/lib/supabase/browser";
 import Avatar from "./Avatar";
 import CommentBody from "./CommentBody";
 import CommentForm from "./CommentForm";
-
-export interface Viewer {
-  id: string;
-  displayName: string;
-  avatarUrl: string | null;
-  isAdmin: boolean;
-}
+import { useViewer, type Viewer } from "./useViewer";
 
 export default function CommentThread({
   postId,
   slug,
   comments,
-  viewer,
 }: {
   postId: string;
   slug: string;
   comments: PublicComment[];
-  viewer: Viewer | null;
 }) {
+  const loadedViewer = useViewer();
+  const viewer = loadedViewer ?? null;
+  const router = useRouter();
+  const [signingOut, startSignOut] = useTransition();
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const topLevel = comments.filter((comment) => !comment.parentId);
   const repliesTo = (id: string) => comments.filter((comment) => comment.parentId === id);
@@ -39,19 +36,28 @@ export default function CommentThread({
         Comments{comments.length > 0 && ` (${comments.length})`}
       </h2>
 
-      {viewer ? (
+      {loadedViewer === undefined ? (
+        <div className="h-14 rounded-lg bg-surface" aria-busy />
+      ) : viewer ? (
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
             <Avatar name={viewer.displayName} url={viewer.avatarUrl} size={24} />
             <span>
               Commenting as <span className="font-medium text-ink">{viewer.displayName}</span>
             </span>
-            <form action={signOut}>
-              <input type="hidden" name="next" value={here} />
-              <button type="submit" className="text-subtle underline hover:text-ink">
-                Sign out
-              </button>
-            </form>
+            <button
+              type="button"
+              disabled={signingOut}
+              onClick={() =>
+                startSignOut(async () => {
+                  await createBrowserSupabase().auth.signOut();
+                  router.refresh();
+                })
+              }
+              className="text-subtle underline hover:text-ink disabled:opacity-50"
+            >
+              Sign out
+            </button>
           </div>
           <CommentForm postId={postId} />
         </div>

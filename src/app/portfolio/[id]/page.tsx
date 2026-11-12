@@ -14,6 +14,11 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+// Render the whole page ahead (or, for a project added after the build, in full
+// before answering), so an unknown slug gets a real 404 instead of a page frame
+// that is already on its way when notFound() runs.
+export const ensureStatic = "navigation";
+
 export async function generateStaticParams() {
   const projects = await getProjects();
   return projects.map(({ slug }) => ({ id: slug }));

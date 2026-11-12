@@ -12,6 +12,11 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+// Render the whole page ahead (or, for a post published after the build, in
+// full before answering), so an unknown or draft slug gets a real 404 instead
+// of a page frame that is already on its way when notFound() runs.
+export const ensureStatic = "navigation";
+
 export async function generateStaticParams() {
   const posts = await getPosts();
   return posts.map(({ slug }) => ({ id: slug }));
@@ -58,7 +63,7 @@ export default async function BlogPostPage({ params }: Props) {
         coverImageUrl={post.cover_image_url}
       />
       <section id="comments" className="mt-16 scroll-mt-24 border-t border-line pt-10">
-        {/* Comments depend on who is visiting, so they stream in after the static post. */}
+        {/* Comments are cached and built with the page; the sign-in state loads in the browser. */}
         <Suspense fallback={<CommentsSkeleton />}>
           <CommentsSection postId={post.id} slug={post.slug} />
         </Suspense>

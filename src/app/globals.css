@@ -109,6 +109,25 @@
   font-size: x-large;
 }
 
+/*
+ * Display formulas: a formula wider than the screen scrolls sideways inside
+ * its own box instead of stretching the whole page (which made phones zoom
+ * out). The vertical padding keeps tall symbols from being clipped.
+ */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.4em;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* On phones, slightly smaller display formulas so most fit without scrolling. */
+@media (max-width: 639px) {
+  .katex-display > .katex {
+    font-size: 1.05em;
+  }
+}
+
 /* Home page: the name types itself once, then the cursor keeps blinking. */
 .typewriter {
   display: inline-block;

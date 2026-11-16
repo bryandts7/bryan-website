@@ -5,6 +5,7 @@ import type { AdminExperience } from "@/lib/admin-data";
 import DeleteButton from "./DeleteButton";
 import { Field, FormMessage, inputClass, MarkDirtyContext, SaveBar, useAdminForm } from "./form";
 import ImageField from "./ImageField";
+import IndonesianSection from "./IndonesianSection";
 
 export default function ExperienceForm({
   experience,
@@ -102,6 +103,28 @@ export default function ExperienceForm({
             className={inputClass}
           />
         </Field>
+
+        <IndonesianSection
+          translated={Boolean(experience?.period_id || experience?.title_id || experience?.details_id)}
+        >
+          <div className="grid gap-6 md:grid-cols-2">
+            <Field label="Period (Indonesian)" htmlFor="period_id" error={errors.period_id} hint="e.g. Mar 2025 - Sekarang">
+              <input id="period_id" name="period_id" defaultValue={experience?.period_id ?? ""} className={inputClass} />
+            </Field>
+            <Field label="Role or degree (Indonesian)" htmlFor="title_id" error={errors.title_id}>
+              <input id="title_id" name="title_id" defaultValue={experience?.title_id ?? ""} className={inputClass} />
+            </Field>
+          </div>
+          <Field label="Details (Indonesian)" htmlFor="details_id" error={errors.details_id}>
+            <textarea
+              id="details_id"
+              name="details_id"
+              defaultValue={experience?.details_id ?? ""}
+              rows={4}
+              className={inputClass}
+            />
+          </Field>
+        </IndonesianSection>
 
         <SaveBar pending={pending} dirty={dirty} label={experience ? "Save changes" : "Add entry"} />
       </form>

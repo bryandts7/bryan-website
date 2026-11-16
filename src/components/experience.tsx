@@ -1,11 +1,12 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 
 export interface ExperienceProps {
-  year: string;
-  title: string;
+  year: ReactNode;
+  title: ReactNode;
   company: string;
   logo?: string | null;
-  details: string;
+  details?: ReactNode;
 }
 
 /** One entry on the experience timeline. */

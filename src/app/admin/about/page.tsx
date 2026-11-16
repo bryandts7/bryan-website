@@ -10,13 +10,21 @@ export default async function AdminAboutPage({
   searchParams: Promise<{ saved?: string }>;
 }) {
   if ((await getAdminState()).status !== "admin") return null;
-  const [about, { saved }] = await Promise.all([adminGetAbout(), searchParams]);
+  const [about, aboutId, { saved }] = await Promise.all([
+    adminGetAbout(),
+    adminGetAbout("about_me_id"),
+    searchParams,
+  ]);
 
   return (
     <div>
       {saved && <Notice>Saved. The home page shows the new text.</Notice>}
       <ResetOnNavigate>
-        <AboutForm key={about.updated_at ?? "new"} value={about.value_md} />
+        <AboutForm
+          key={`${about.updated_at ?? "new"}|${aboutId.updated_at ?? "new"}`}
+          value={about.value_md}
+          valueId={aboutId.value_md}
+        />
       </ResetOnNavigate>
     </div>
   );

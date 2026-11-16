@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/lib/content";
 import { DocumentIcon, ExternalIcon, GitHubIcon } from "./icons";
+import { Bi, T } from "./Lang";
 import { Tag } from "./ui";
 
 const MAX_TAGS = 4;
@@ -29,7 +30,7 @@ export default function ProjectCard({ project, headingLevel = "h2" }: { project:
         )}
         {project.is_interactive && (
           <span className="absolute top-3 right-3 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white shadow">
-            Interactive
+            <T k="projects.interactive" />
           </span>
         )}
       </div>
@@ -37,10 +38,14 @@ export default function ProjectCard({ project, headingLevel = "h2" }: { project:
       <div className="flex grow flex-col p-5">
         <Heading className="text-lg font-semibold leading-snug text-ink group-hover:text-accent">
           <Link href={`/portfolio/${project.slug}`} className="after:absolute after:inset-0">
-            {project.title}
+            <Bi en={project.title} id={project.title_id} />
           </Link>
         </Heading>
-        {project.description && <p className="mt-2 line-clamp-3 text-sm text-muted">{project.description}</p>}
+        {project.description && (
+          <p className="mt-2 line-clamp-3 text-sm text-muted">
+            <Bi en={project.description} id={project.description_id} />
+          </p>
+        )}
 
         {project.technologies.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-1.5">
@@ -54,17 +59,17 @@ export default function ProjectCard({ project, headingLevel = "h2" }: { project:
         <div className="relative z-10 mt-auto flex flex-wrap items-center gap-4 pt-5 text-sm font-medium">
           {project.is_interactive && project.demo_url && (
             <Link href={project.demo_url} className="text-emerald-600 hover:underline dark:text-emerald-400">
-              Try it →
+              <T k="projects.tryIt" /> →
             </Link>
           )}
           {project.github_url && (
             <a href={project.github_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-muted hover:text-ink">
-              <GitHubIcon className="h-4 w-4" /> Code
+              <GitHubIcon className="h-4 w-4" /> <T k="projects.code" />
             </a>
           )}
           {project.paper_url && (
             <a href={project.paper_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-muted hover:text-ink">
-              <DocumentIcon /> Paper
+              <DocumentIcon /> <T k="projects.paper" />
             </a>
           )}
           {!project.is_interactive && project.demo_url && (
@@ -73,7 +78,7 @@ export default function ProjectCard({ project, headingLevel = "h2" }: { project:
               {...(demoIsInternal ? {} : { target: "_blank", rel: "noopener noreferrer" })}
               className="inline-flex items-center gap-1.5 text-muted hover:text-ink"
             >
-              <ExternalIcon /> Demo
+              <ExternalIcon /> <T k="projects.demo" />
             </a>
           )}
         </div>

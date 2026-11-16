@@ -11,6 +11,9 @@ export interface AdminPost {
   title: string;
   excerpt: string;
   content_md: string;
+  title_id: string | null;
+  excerpt_id: string | null;
+  content_md_id: string | null;
   cover_image_url: string | null;
   tags: string[];
   status: "draft" | "published";
@@ -24,6 +27,9 @@ export interface AdminProject {
   title: string;
   description: string;
   content_md: string;
+  title_id: string | null;
+  description_id: string | null;
+  content_md_id: string | null;
   image_url: string | null;
   image_width: number | null;
   image_height: number | null;
@@ -45,6 +51,9 @@ export interface AdminExperience {
   organization: string;
   logo_url: string | null;
   details: string;
+  period_id: string | null;
+  title_id: string | null;
+  details_id: string | null;
   sort_order: number;
   updated_at: string;
 }
@@ -69,7 +78,9 @@ export async function adminGetPost(id: string): Promise<AdminPost | null> {
   const supabase = await createSessionClient();
   const { data, error } = await supabase
     .from("posts")
-    .select("id, slug, title, excerpt, content_md, cover_image_url, tags, status, published_at, updated_at")
+    .select(
+      "id, slug, title, excerpt, content_md, title_id, excerpt_id, content_md_id, cover_image_url, tags, status, published_at, updated_at"
+    )
     .eq("id", id)
     .maybeSingle();
   if (error) fail("the post", error.message);
@@ -93,7 +104,7 @@ export async function adminGetProject(id: string): Promise<AdminProject | null> 
   const { data, error } = await supabase
     .from("projects")
     .select(
-      "id, slug, title, description, content_md, image_url, image_width, image_height, technologies, github_url, paper_url, demo_url, is_interactive, sort_order, status, updated_at"
+      "id, slug, title, description, content_md, title_id, description_id, content_md_id, image_url, image_width, image_height, technologies, github_url, paper_url, demo_url, is_interactive, sort_order, status, updated_at"
     )
     .eq("id", id)
     .maybeSingle();
@@ -117,7 +128,7 @@ export async function adminGetExperience(id: string): Promise<AdminExperience | 
   const supabase = await createSessionClient();
   const { data, error } = await supabase
     .from("experiences")
-    .select("id, kind, period, title, organization, logo_url, details, sort_order, updated_at")
+    .select("id, kind, period, title, organization, logo_url, details, period_id, title_id, details_id, sort_order, updated_at")
     .eq("id", id)
     .maybeSingle();
   if (error) fail("the experience entry", error.message);
@@ -149,12 +160,15 @@ export async function adminListComments(status: "all" | "visible" | "hidden" = "
   return data;
 }
 
-export async function adminGetAbout(): Promise<{ value_md: string; updated_at: string | null }> {
+/** "about_me" (English) or "about_me_id" (Indonesian). */
+export async function adminGetAbout(
+  key: "about_me" | "about_me_id" = "about_me"
+): Promise<{ value_md: string; updated_at: string | null }> {
   const supabase = await createSessionClient();
   const { data, error } = await supabase
     .from("site_content")
     .select("value_md, updated_at")
-    .eq("key", "about_me")
+    .eq("key", key)
     .maybeSingle();
   if (error) fail("the About-me text", error.message);
   return data ?? { value_md: "", updated_at: null };

@@ -1,7 +1,8 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { ArrowLeftIcon } from "./icons";
 
-export default function BackLink({ href, children }: { href: string; children: string }) {
+export default function BackLink({ href, children }: { href: string; children: ReactNode }) {
   return (
     <Link
       href={href}

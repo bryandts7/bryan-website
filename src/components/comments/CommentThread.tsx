@@ -7,6 +7,8 @@ import { deleteComment, setCommentHidden } from "@/app/comments/actions";
 import type { PublicComment } from "@/lib/comments";
 import { formatDateTime } from "@/lib/dates";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
+import { useT } from "@/lib/lang-client";
+import { T } from "../Lang";
 import Avatar from "./Avatar";
 import CommentBody from "./CommentBody";
 import CommentForm from "./CommentForm";
@@ -26,6 +28,7 @@ export default function CommentThread({
   const router = useRouter();
   const [signingOut, startSignOut] = useTransition();
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const t = useT();
   const topLevel = comments.filter((comment) => !comment.parentId);
   const repliesTo = (id: string) => comments.filter((comment) => comment.parentId === id);
   const here = `/blog/${slug}#comments`;
@@ -33,7 +36,8 @@ export default function CommentThread({
   return (
     <div className="space-y-8">
       <h2 className="text-2xl font-bold text-ink">
-        Comments{comments.length > 0 && ` (${comments.length})`}
+        <T k="comments.title" />
+        {comments.length > 0 && ` (${comments.length})`}
       </h2>
 
       {loadedViewer === undefined ? (
@@ -43,7 +47,7 @@ export default function CommentThread({
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
             <Avatar name={viewer.displayName} url={viewer.avatarUrl} size={24} />
             <span>
-              Commenting as <span className="font-medium text-ink">{viewer.displayName}</span>
+              <T k="comments.commentingAs" /> <span className="font-medium text-ink">{viewer.displayName}</span>
             </span>
             <button
               type="button"
@@ -56,7 +60,7 @@ export default function CommentThread({
               }
               className="text-subtle underline hover:text-ink disabled:opacity-50"
             >
-              Sign out
+              <T k="comments.signOut" />
             </button>
           </div>
           <CommentForm postId={postId} />
@@ -67,14 +71,16 @@ export default function CommentThread({
             href={`/login?next=${encodeURIComponent(here)}`}
             className="font-semibold text-accent hover:underline"
           >
-            Sign in with GitHub or Google
+            <T k="comments.signIn" />
           </Link>{" "}
-          to join the discussion. Only your name and profile picture are shown.
+          <T k="comments.signInRest" />
         </div>
       )}
 
       {topLevel.length === 0 ? (
-        <p className="text-sm text-subtle">No comments yet.</p>
+        <p className="text-sm text-subtle">
+          <T k="comments.none" />
+        </p>
       ) : (
         <ol className="space-y-6">
           {topLevel.map((comment) => (
@@ -86,7 +92,7 @@ export default function CommentThread({
                     onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}
                     className="text-sm text-subtle hover:text-ink"
                   >
-                    Reply
+                    <T k="comments.reply" />
                   </button>
                 )}
               </CommentItem>
@@ -103,8 +109,8 @@ export default function CommentThread({
                       <CommentForm
                         postId={postId}
                         parentId={comment.id}
-                        placeholder={`Reply to ${comment.author.displayName}…`}
-                        submitLabel="Post reply"
+                        placeholder={`${t("comments.replyTo")} ${comment.author.displayName}…`}
+                        submitLabel="comments.postReply"
                         autoFocus
                         onDone={() => setReplyingTo(null)}
                       />
@@ -131,6 +137,7 @@ function CommentItem({
   viewer: Viewer | null;
   children?: React.ReactNode;
 }) {
+  const t = useT();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const isOwn = viewer?.id === comment.author.id;
@@ -152,7 +159,7 @@ function CommentItem({
           <span className="font-semibold text-ink">{comment.author.displayName}</span>
           {comment.author.isSiteOwner && (
             <span className="rounded-full bg-accent-soft px-2 py-0.5 text-xs font-medium text-accent">
-              Author
+              <T k="comments.author" />
             </span>
           )}
           <time dateTime={comment.createdAt} className="text-subtle">
@@ -171,7 +178,7 @@ function CommentItem({
               onClick={() => run(() => setCommentHidden(comment.id, postId, true))}
               className="text-sm text-subtle hover:text-ink"
             >
-              Hide
+              <T k="comments.hide" />
             </button>
           )}
           {canDelete && (
@@ -179,14 +186,12 @@ function CommentItem({
               type="button"
               disabled={pending}
               onClick={() => {
-                const message = comment.parentId
-                  ? "Delete this reply? This cannot be undone."
-                  : "Delete this comment and its replies? This cannot be undone.";
+                const message = t(comment.parentId ? "comments.confirmReply" : "comments.confirmComment");
                 if (window.confirm(message)) run(() => deleteComment(comment.id, postId));
               }}
               className="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
             >
-              Delete
+              <T k="comments.delete" />
             </button>
           )}
         </div>

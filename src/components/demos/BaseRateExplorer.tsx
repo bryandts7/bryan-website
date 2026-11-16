@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { runDetector } from "@/lib/base-rate";
+import { Bi } from "../Lang";
 import { Choice, DemoFrame, formatCount, formatPercent, Slider, Stat } from "./DemoParts";
 
 const POPULATION = 1_000_000;
@@ -11,10 +12,10 @@ const MIN_EXP = 0.3;
 const MAX_EXP = 5;
 
 const PRESETS = [
-  { label: "Post example (1 in 1,000)", oneIn: 1000, signals: 1 },
-  { label: "Two signals (§4)", oneIn: 1000, signals: 2 },
-  { label: "Risky segment (1 in 10)", oneIn: 10, signals: 1 },
-  { label: "50/50 test set", oneIn: 2, signals: 1 },
+  { label: "Post example (1 in 1,000)", labelId: "Contoh di tulisan (1 dari 1.000)", oneIn: 1000, signals: 1 },
+  { label: "Two signals (§4)", labelId: "Dua sinyal (§4)", oneIn: 1000, signals: 2 },
+  { label: "Risky segment (1 in 10)", labelId: "Segmen berisiko (1 dari 10)", oneIn: 10, signals: 1 },
+  { label: "50/50 test set", labelId: "Data uji 50/50", oneIn: 2, signals: 1 },
 ];
 
 /** Round "1 in N" to a readable number (2 significant figures above 100). */
@@ -46,51 +47,61 @@ export default function BaseRateExplorer() {
 
   return (
     <DemoFrame
-      title="Base-rate explorer"
-      hint="1,000,000 devices. Move the sliders and watch how often a flag is actually right."
+      title={<Bi en="Base-rate explorer" id="Penjelajah base rate" />}
+      hint={
+        <Bi
+          en="1,000,000 devices. Move the sliders and watch how often a flag is actually right."
+          id="1.000.000 perangkat. Geser slider dan lihat seberapa sering sebuah tanda (flag) benar-benar tepat."
+        />
+      }
     >
       <div className="mb-5 flex flex-wrap gap-2">
         {PRESETS.map((preset) => (
           <Choice key={preset.label} active={isPreset(preset)} onClick={() => applyPreset(preset)}>
-            {preset.label}
+            <Bi en={preset.label} id={preset.labelId} />
           </Choice>
         ))}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Slider
-          label="Bots in the population"
+          label={<Bi en="Bots in the population" id="Bot dalam populasi" />}
           value={Math.log10(oneIn)}
-          display={`1 in ${formatCount(oneIn)}`}
+          display={<Bi en={`1 in ${formatCount(oneIn)}`} id={`1 dari ${formatCount(oneIn).replace(/,/g, ".")}`} />}
+          valueText={`1 in ${formatCount(oneIn)}`}
           min={MIN_EXP}
           max={MAX_EXP}
           step={0.01}
           onChange={(exponent) => setOneIn(niceOneIn(exponent))}
         />
         <Slider
-          label="Bots each signal catches (recall)"
+          label={<Bi en="Bots each signal catches (recall)" id="Bot yang tertangkap tiap sinyal (recall)" />}
           value={recall * 100}
           display={`${(recall * 100).toFixed(1)}%`}
+          valueText={`${(recall * 100).toFixed(1)}%`}
           min={50}
           max={99.9}
           step={0.1}
           onChange={(percent) => setRecall(Math.round(percent * 10) / 1000)}
         />
         <Slider
-          label="Real devices each signal wrongly flags"
+          label={<Bi en="Real devices each signal wrongly flags" id="Perangkat asli yang salah ditandai tiap sinyal" />}
           value={falsePositiveRate * 100}
           display={`${(falsePositiveRate * 100).toFixed(1)}%`}
+          valueText={`${(falsePositiveRate * 100).toFixed(1)}%`}
           min={0.1}
           max={20}
           step={0.1}
           onChange={(percent) => setFalsePositiveRate(Math.round(percent * 10) / 1000)}
         />
         <div>
-          <div className="text-sm text-muted">Independent signals a device must trip</div>
+          <div className="text-sm text-muted">
+            <Bi en="Independent signals a device must trip" id="Sinyal independen yang harus dipicu perangkat" />
+          </div>
           <div className="mt-2 flex gap-2">
             {[1, 2, 3].map((count) => (
               <Choice key={count} active={signals === count} onClick={() => setSignals(count)}>
-                {count} signal{count > 1 ? "s" : ""}
+                {count} <Bi en={count > 1 ? "signals" : "signal"} id="sinyal" />
               </Choice>
             ))}
           </div>
@@ -98,28 +109,43 @@ export default function BaseRateExplorer() {
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <Stat label="Bots flagged" value={formatCount(result.truePositives)} tone="accent" />
-        <Stat label="Innocent flagged" value={formatCount(result.falsePositives)} tone="warn" />
-        <Stat label="Bots missed" value={formatCount(result.falseNegatives)} />
-        <Stat label="Real left alone" value={formatCount(result.trueNegatives)} />
+        <Stat label={<Bi en="Bots flagged" id="Bot ditandai" />} value={formatCount(result.truePositives)} tone="accent" />
+        <Stat label={<Bi en="Innocent flagged" id="Tak bersalah ditandai" />} value={formatCount(result.falsePositives)} tone="warn" />
+        <Stat label={<Bi en="Bots missed" id="Bot lolos" />} value={formatCount(result.falseNegatives)} />
+        <Stat label={<Bi en="Real left alone" id="Asli dibiarkan" />} value={formatCount(result.trueNegatives)} />
       </div>
 
       <div className="mt-6 grid gap-6 sm:grid-cols-[auto_1fr] sm:items-center">
         <FlagGrid botFlags={botFlagsPer100} hasFlags={result.flags >= 0.5} />
         <div aria-live="polite">
-          <div className="text-sm text-muted">When it flags a device, it&apos;s right</div>
+          <div className="text-sm text-muted">
+            <Bi en="When it flags a device, it's right" id="Saat menandai perangkat, ia benar" />
+          </div>
           <div className="font-mono text-4xl font-bold text-ink">{formatPercent(result.precision)}</div>
-          <div className="text-sm text-muted">of the time (precision)</div>
+          <div className="text-sm text-muted">
+            <Bi en="of the time (precision)" id="dari seluruh tanda (presisi)" />
+          </div>
           <p className="mt-3 text-sm text-muted">
-            {result.flags < 0.5
-              ? "It flags almost nothing at these settings."
-              : innocentPerBot >= 1
-                ? `About ${formatCount(innocentPerBot)} innocent device${Math.round(innocentPerBot) === 1 ? "" : "s"} flagged for every real bot.`
-                : `About ${formatCount(1 / innocentPerBot)} real bots flagged for every innocent device.`}
+            {result.flags < 0.5 ? (
+              <Bi
+                en="It flags almost nothing at these settings."
+                id="Dengan pengaturan ini, hampir tidak ada yang ditandai."
+              />
+            ) : innocentPerBot >= 1 ? (
+              <Bi
+                en={`About ${formatCount(innocentPerBot)} innocent device${Math.round(innocentPerBot) === 1 ? "" : "s"} flagged for every real bot.`}
+                id={`Sekitar ${formatCount(innocentPerBot).replace(/,/g, ".")} perangkat tak bersalah ditandai untuk setiap bot asli.`}
+              />
+            ) : (
+              <Bi
+                en={`About ${formatCount(1 / innocentPerBot)} real bots flagged for every innocent device.`}
+                id={`Sekitar ${formatCount(1 / innocentPerBot).replace(/,/g, ".")} bot asli ditandai untuk setiap perangkat tak bersalah.`}
+              />
+            )}
           </p>
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <Stat label="Accuracy" value={formatPercent(result.accuracy, { precise: true })} />
-            <Stat label="“Never flag” accuracy" value={formatPercent(result.doNothingAccuracy, { precise: true })} />
+            <Stat label={<Bi en="Accuracy" id="Akurasi" />} value={formatPercent(result.accuracy, { precise: true })} />
+            <Stat label={<Bi en="“Never flag” accuracy" id="Akurasi “tidak pernah menandai”" />} value={formatPercent(result.doNothingAccuracy, { precise: true })} />
           </div>
         </div>
       </div>
@@ -150,9 +176,11 @@ function FlagGrid({ botFlags, hasFlags }: { botFlags: number; hasFlags: boolean 
           <span className="h-2.5 w-2.5 rounded-[2px] bg-accent" /> bot
         </span>
         <span className="flex items-center gap-1">
-          <span className="h-2.5 w-2.5 rounded-[2px] bg-warn" /> innocent
+          <span className="h-2.5 w-2.5 rounded-[2px] bg-warn" /> <Bi en="innocent" id="tak bersalah" />
         </span>
-        <span>per 100 flags</span>
+        <span>
+          <Bi en="per 100 flags" id="per 100 tanda" />
+        </span>
       </div>
     </div>
   );

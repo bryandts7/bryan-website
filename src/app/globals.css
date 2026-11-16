@@ -2,9 +2,34 @@
 @plugin "@tailwindcss/typography";
 
 /*
+ * Dark mode follows the visitor's system setting, unless they picked a theme
+ * with the toggle: that sets <html data-theme="light|dark"> (see ThemeToggle
+ * and the script in layout.tsx). The `dark:` utilities follow the same rule.
+ */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+}
+
+/*
+ * Language: pages carry English and Indonesian text side by side (components/
+ * Lang.tsx) and <html data-lang="id"> picks Indonesian. Default is English.
+ */
+:root:not([data-lang="id"]) .lang-id,
+:root[data-lang="id"] .lang-en {
+  display: none !important;
+}
+
+/*
  * Colour tokens. Components use these names (bg-page, text-ink, border-line,
  * text-accent, ...) instead of fixed colours, so the whole site follows the
- * visitor's light/dark setting.
+ * chosen light/dark theme.
  */
 :root {
   --page: #ffffff;
@@ -21,8 +46,9 @@
   color-scheme: light;
 }
 
+/* Dark tokens: system dark (unless the visitor chose light), or chosen dark. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --page: #0b0b0e;
     --ink: #f4f4f5;
     --muted: #a1a1aa;
@@ -36,6 +62,21 @@
     --warn: #fb923c;
     color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --page: #0b0b0e;
+  --ink: #f4f4f5;
+  --muted: #a1a1aa;
+  --subtle: #71717a;
+  --card: #141418;
+  --surface: #1c1c21;
+  --line: #2a2a31;
+  --accent: #60a5fa;
+  --accent-ink: #0b0b0e;
+  --accent-soft: #172033;
+  --warn: #fb923c;
+  color-scheme: dark;
 }
 
 /* The admin console is always light (its forms use fixed light colours). */

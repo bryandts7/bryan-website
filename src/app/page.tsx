@@ -5,6 +5,7 @@ import Markdown from "react-markdown";
 import MyFace from "@/assets/bryan_photo_new.jpg";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import JsonLd from "@/components/JsonLd";
+import { Bi, T } from "@/components/Lang";
 import PostCard from "@/components/PostCard";
 import ProjectGrid from "@/components/ProjectGrid";
 import { buttonPrimary, buttonSecondary, Container, SectionHeading } from "@/components/ui";
@@ -21,8 +22,9 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [aboutMe, posts, projects, experiences] = await Promise.all([
+  const [aboutMe, aboutMeId, posts, projects, experiences] = await Promise.all([
     getSiteContent("about_me"),
+    getSiteContent("about_me_id"),
     getPosts(),
     getProjects(),
     getExperiences(),
@@ -53,29 +55,32 @@ export default async function HomePage() {
       <section className="border-b border-line">
         <Container className="grid items-center gap-10 py-16 sm:py-20 md:grid-cols-[1fr_auto]">
           <div>
-            <p className="text-sm font-semibold tracking-wide text-accent uppercase">Hi, I&apos;m</p>
+            <p className="text-sm font-semibold tracking-wide text-accent uppercase">
+              <T k="home.hi" />
+            </p>
             <h1 className="mt-2 font-pixel text-4xl leading-tight text-ink sm:text-6xl lg:text-7xl">
               <span className="typewriter">Bryan Delton</span>
             </h1>
             {current && (
               <p className="mt-4 text-xl text-muted">
-                {current.title}
+                <Bi en={current.title} id={current.title_id} />
                 {organization && (
                   <>
-                    {" "}at <span className="font-semibold text-ink">{organization}</span>
+                    {" "}
+                    <T k="home.at" /> <span className="font-semibold text-ink">{organization}</span>
                   </>
                 )}
               </p>
             )}
             <p className="mt-3 max-w-xl text-muted">
-              Machine learning, fraud detection and quant. I also write about the mathematics behind them.
+              <T k="home.tagline" />
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link href="/blogs" className={buttonPrimary}>
-                Read the blog
+                <T k="home.readBlog" />
               </Link>
               <Link href="/portfolio" className={buttonSecondary}>
-                See projects
+                <T k="home.seeProjects" />
               </Link>
               <span className="flex items-center">
                 <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="rounded-lg p-2.5 text-muted transition-colors hover:text-ink">
@@ -102,15 +107,31 @@ export default async function HomePage() {
 
       {/* About (edited in the admin console) */}
       <Container className="py-16">
-        <SectionHeading title="About me" />
-        <div className="prose prose-zinc max-w-3xl dark:prose-invert prose-a:text-accent">
-          <Markdown>{aboutMe}</Markdown>
-        </div>
+        <SectionHeading title={<T k="home.aboutMe" />} />
+        <Bi
+          block
+          en={
+            <div className="prose prose-zinc max-w-3xl dark:prose-invert prose-a:text-accent">
+              <Markdown>{aboutMe}</Markdown>
+            </div>
+          }
+          id={
+            aboutMeId.trim() ? (
+              <div className="prose prose-zinc max-w-3xl dark:prose-invert prose-a:text-accent">
+                <Markdown>{aboutMeId}</Markdown>
+              </div>
+            ) : null
+          }
+        />
       </Container>
 
       {posts.length > 0 && (
         <Container className="pb-16">
-          <SectionHeading title="Latest writing" href="/blogs" linkLabel="All posts" />
+          <SectionHeading
+            title={<T k="home.latestWriting" />}
+            href="/blogs"
+            linkLabel={<T k="home.allPosts" />}
+          />
           <div className="grid gap-4 md:grid-cols-3">
             {posts.slice(0, 3).map((post) => (
               <PostCard key={post.slug} post={post} headingLevel="h3" />
@@ -121,7 +142,11 @@ export default async function HomePage() {
 
       {projects.length > 0 && (
         <Container className="pb-8">
-          <SectionHeading title="Selected projects" href="/portfolio" linkLabel="All projects" />
+          <SectionHeading
+            title={<T k="home.selectedProjects" />}
+            href="/portfolio"
+            linkLabel={<T k="home.allProjects" />}
+          />
           <ProjectGrid projects={projects.slice(0, 3)} headingLevel="h3" />
         </Container>
       )}

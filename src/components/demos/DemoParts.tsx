@@ -1,13 +1,16 @@
 "use client";
 
 import { useId, type ReactNode } from "react";
+import { T } from "../Lang";
 
 /** The card every interactive demo sits in, set apart from the article text. */
-export function DemoFrame({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
+export function DemoFrame({ title, hint, children }: { title: ReactNode; hint?: ReactNode; children: ReactNode }) {
   return (
     <figure className="not-prose my-10 rounded-xl border border-line bg-card p-4 shadow-sm sm:p-6">
       <figcaption className="mb-5">
-        <span className="text-xs font-semibold tracking-wide text-accent uppercase">Try it</span>
+        <span className="text-xs font-semibold tracking-wide text-accent uppercase">
+          <T k="demo.tryIt" />
+        </span>
         <span className="mt-1 block text-lg font-semibold text-ink">{title}</span>
         {hint && <span className="mt-1 block text-sm text-muted">{hint}</span>}
       </figcaption>
@@ -21,14 +24,17 @@ export function Slider({
   label,
   value,
   display,
+  valueText,
   min,
   max,
   step,
   onChange,
 }: {
-  label: string;
+  label: ReactNode;
   value: number;
-  display: string;
+  display: ReactNode;
+  /** Plain-text value for screen readers. */
+  valueText: string;
   min: number;
   max: number;
   step: number;
@@ -52,7 +58,7 @@ export function Slider({
         max={max}
         step={step}
         value={value}
-        aria-valuetext={display}
+        aria-valuetext={valueText}
         onChange={(event) => onChange(Number(event.target.value))}
         className="mt-1.5 h-6 w-full cursor-pointer accent-accent"
       />
@@ -84,7 +90,7 @@ export function Choice({
   );
 }
 
-export function Stat({ label, value, tone = "ink" }: { label: string; value: string; tone?: "ink" | "accent" | "warn" }) {
+export function Stat({ label, value, tone = "ink" }: { label: ReactNode; value: string; tone?: "ink" | "accent" | "warn" }) {
   const color = tone === "accent" ? "text-accent" : tone === "warn" ? "text-warn" : "text-ink";
   return (
     <div className="rounded-lg bg-surface px-3 py-2.5">

@@ -1,26 +1,25 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { useTheme } from "@/lib/theme";
 
 type State =
   | { status: "loading" }
   | { status: "ready"; svg: string }
   | { status: "failed" };
 
-/** Dark theme when the visitor uses dark mode, except inside the always-light admin. */
-function prefersDark(element: HTMLElement | null): boolean {
-  if (element?.closest(".light-only")) return false;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
-
 export default function Mermaid({ chart }: { chart: string }) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, "");
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<State>({ status: "loading" });
+  // Re-drawn when the visitor switches theme.
+  const theme = useTheme();
 
   useEffect(() => {
+    if (theme === null) return;
     let cancelled = false;
-    const dark = prefersDark(ref.current);
+    // Dark diagrams in dark mode, except inside the always-light admin console.
+    const dark = theme === "dark" && !ref.current?.closest(".light-only");
 
     // Loaded on demand so the library is only downloaded on posts with a diagram.
     import("mermaid")
@@ -36,7 +35,7 @@ export default function Mermaid({ chart }: { chart: string }) {
     return () => {
       cancelled = true;
     };
-  }, [chart, id]);
+  }, [chart, id, theme]);
 
   if (state.status === "failed") {
     return (

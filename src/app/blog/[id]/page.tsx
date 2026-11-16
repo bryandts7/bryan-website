@@ -3,11 +3,12 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import BackLink from "@/components/BackLink";
 import JsonLd from "@/components/JsonLd";
+import { T } from "@/components/Lang";
 import PostViews from "@/components/PostViews";
 import Blog from "@/components/blog";
 import CommentsSection, { CommentsSkeleton } from "@/components/comments/CommentsSection";
 import { Container } from "@/components/ui";
-import { formatDate, getPost, getPosts } from "@/lib/content";
+import { getPost, getPosts } from "@/lib/content";
 import { OPEN_GRAPH_DEFAULTS } from "@/lib/site";
 import { postStructuredData } from "@/lib/structured-data";
 
@@ -56,11 +57,14 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <Container size="narrow" className="pt-8">
       <JsonLd data={postStructuredData(post)} />
-      <BackLink href="/blogs">All posts</BackLink>
+      <BackLink href="/blogs">
+        <T k="blog.allPosts" />
+      </BackLink>
       <Blog
         title={post.title}
+        titleId={post.title_id}
         content={post.content_md}
-        date={formatDate(post.published_at)}
+        contentId={post.content_md_id}
         isoDate={post.published_at}
         readingMinutes={post.reading_minutes}
         tags={post.tags}

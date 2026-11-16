@@ -8,6 +8,7 @@ import { slugify } from "@/lib/slug";
 import DeleteButton from "./DeleteButton";
 import { Field, FormMessage, inputClass, MarkDirtyContext, SaveBar, useAdminForm } from "./form";
 import ImageField from "./ImageField";
+import IndonesianSection from "./IndonesianSection";
 import MarkdownEditor from "./MarkdownEditor";
 
 export default function ProjectForm({
@@ -192,6 +193,32 @@ export default function ProjectForm({
           rows={14}
           hint="Shown on the project page. Markdown."
         />
+
+        <IndonesianSection
+          translated={Boolean(project?.title_id || project?.description_id || project?.content_md_id)}
+        >
+          <Field label="Title (Indonesian)" htmlFor="title_id" error={errors.title_id}>
+            <input id="title_id" name="title_id" defaultValue={project?.title_id ?? ""} className={inputClass} />
+          </Field>
+          <Field label="Short description (Indonesian)" htmlFor="description_id" error={errors.description_id}>
+            <textarea
+              id="description_id"
+              name="description_id"
+              defaultValue={project?.description_id ?? ""}
+              rows={2}
+              className={inputClass}
+            />
+          </Field>
+          <MarkdownEditor
+            label="Details (Indonesian)"
+            name="content_md_id"
+            defaultValue={project?.content_md_id ?? ""}
+            folder="projects"
+            error={errors.content_md_id}
+            rows={10}
+            hint="Markdown. Empty: the English details are shown."
+          />
+        </IndonesianSection>
 
         <SaveBar pending={pending} dirty={dirty} label={project ? "Save changes" : "Create project"}>
           {project?.status === "published" && (

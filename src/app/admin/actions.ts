@@ -39,6 +39,9 @@ export async function savePost(_prev: FormState, formData: FormData): Promise<Fo
     slug: form.slug("slug"),
     excerpt: form.text("excerpt", { max: 500 }),
     content_md: form.text("content_md", { max: 200_000, multiline: true }),
+    title_id: form.optionalText("title_id", { max: 200 }),
+    excerpt_id: form.optionalText("excerpt_id", { max: 500 }),
+    content_md_id: form.optionalText("content_md_id", { max: 200_000, multiline: true }),
     tags: form.list("tags", { maxItems: 10, maxLength: 40 }),
     cover_image_url: form.imageUrl("cover_image_url"),
     status: form.oneOf("status", ["draft", "published"] as const),
@@ -79,6 +82,9 @@ export async function saveProject(_prev: FormState, formData: FormData): Promise
     slug: form.slug("slug"),
     description: form.text("description", { max: 500 }),
     content_md: form.text("content_md", { max: 100_000, multiline: true }),
+    title_id: form.optionalText("title_id", { max: 200 }),
+    description_id: form.optionalText("description_id", { max: 500 }),
+    content_md_id: form.optionalText("content_md_id", { max: 100_000, multiline: true }),
     technologies: form.list("technologies", { maxItems: 15, maxLength: 40 }),
     image_url: form.imageUrl("image_url"),
     image_width: form.optionalPositiveInt("image_width"),
@@ -128,6 +134,9 @@ export async function saveExperience(_prev: FormState, formData: FormData): Prom
     organization: form.text("organization", { max: 200 }),
     logo_url: form.imageUrl("logo_url"),
     details: form.text("details", { max: 2000 }),
+    period_id: form.optionalText("period_id", { max: 60 }),
+    title_id: form.optionalText("title_id", { max: 200 }),
+    details_id: form.optionalText("details_id", { max: 2000 }),
     sort_order: form.int("sort_order"),
   };
   if (form.hasErrors) return form.state();
@@ -161,12 +170,18 @@ export async function saveAbout(_prev: FormState, formData: FormData): Promise<F
 
   const form = new FormReader(formData);
   const value_md = form.text("value_md", { required: true, max: 20_000, multiline: true });
+  // Indonesian version; saving it empty clears it (the English then shows).
+  const value_md_id = form.optionalText("value_md_id", { max: 20_000, multiline: true }) ?? "";
   if (form.hasErrors) return form.state();
 
   const supabase = await createSessionClient();
-  const { error } = await supabase
-    .from("site_content")
-    .upsert({ key: "about_me", value_md }, { onConflict: "key" });
+  const { error } = await supabase.from("site_content").upsert(
+    [
+      { key: "about_me", value_md },
+      { key: "about_me_id", value_md: value_md_id },
+    ],
+    { onConflict: "key" }
+  );
   if (error) return dbErrorToState(error, "About-me text");
 
   updateTag("site_content");

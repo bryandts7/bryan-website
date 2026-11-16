@@ -9,6 +9,7 @@ import { slugify } from "@/lib/slug";
 import DeleteButton from "./DeleteButton";
 import { Field, FormMessage, inputClass, MarkDirtyContext, SaveBar, useAdminForm } from "./form";
 import ImageField from "./ImageField";
+import IndonesianSection from "./IndonesianSection";
 import MarkdownEditor from "./MarkdownEditor";
 
 export default function PostForm({ post }: { post?: AdminPost }) {
@@ -123,6 +124,29 @@ export default function PostForm({ post }: { post?: AdminPost }) {
           error={errors.content_md}
           hint="Markdown. Math: $$ x^2 $$. Diagrams: a ```mermaid code block."
         />
+
+        <IndonesianSection translated={Boolean(post?.title_id || post?.excerpt_id || post?.content_md_id)}>
+          <Field label="Title (Indonesian)" htmlFor="title_id" error={errors.title_id}>
+            <input id="title_id" name="title_id" defaultValue={post?.title_id ?? ""} className={inputClass} />
+          </Field>
+          <Field label="Excerpt (Indonesian)" htmlFor="excerpt_id" error={errors.excerpt_id}>
+            <textarea
+              id="excerpt_id"
+              name="excerpt_id"
+              defaultValue={post?.excerpt_id ?? ""}
+              rows={2}
+              className={inputClass}
+            />
+          </Field>
+          <MarkdownEditor
+            label="Content (Indonesian)"
+            name="content_md_id"
+            defaultValue={post?.content_md_id ?? ""}
+            folder="posts"
+            error={errors.content_md_id}
+            hint="Same Markdown as above, including demo and mermaid blocks. Empty: Indonesian readers see the English post with a short note."
+          />
+        </IndonesianSection>
 
         <SaveBar pending={pending} dirty={dirty} label={post ? "Save changes" : "Create post"}>
           {post?.status === "published" && (

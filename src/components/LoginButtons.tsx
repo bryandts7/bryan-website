@@ -4,20 +4,21 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { safeNextPath } from "@/lib/safe-path";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
+import { T } from "./Lang";
+import type { MessageKey } from "@/lib/i18n";
 
 type Provider = "github" | "google";
 
-const providers: { id: Provider; label: string }[] = [
-  { id: "github", label: "Continue with GitHub" },
-  { id: "google", label: "Continue with Google" },
+const providers: { id: Provider; label: MessageKey }[] = [
+  { id: "github", label: "login.github" },
+  { id: "google", label: "login.google" },
 ];
 
 export default function LoginButtons() {
   const searchParams = useSearchParams();
   const [pending, setPending] = useState<Provider | null>(null);
-  const [error, setError] = useState<string | null>(
-    searchParams.get("error") ? "Sign-in did not complete. Please try again." : null
-  );
+  // "callback" = the sign-in round trip failed; any other text is the provider's own error.
+  const [error, setError] = useState<string | null>(searchParams.get("error") ? "callback" : null);
 
   async function signIn(provider: Provider) {
     setPending(provider);
@@ -47,12 +48,12 @@ export default function LoginButtons() {
           disabled={pending !== null}
           className="w-full rounded-lg border border-line bg-card px-4 py-3 font-medium text-ink transition-colors hover:bg-surface disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {pending === id ? "Redirecting…" : label}
+          <T k={pending === id ? "login.redirecting" : label} />
         </button>
       ))}
       {error && (
         <p role="alert" className="text-sm text-red-600 dark:text-red-400">
-          {error}
+          {error === "callback" ? <T k="login.error" /> : error}
         </p>
       )}
     </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { T } from "@/components/Lang";
 import ProjectGrid from "@/components/ProjectGrid";
 import { Container, PageHeader } from "@/components/ui";
 import { getProjects } from "@/lib/content";
@@ -15,8 +16,8 @@ export default async function PortfolioPage() {
   return (
     <Container>
       <PageHeader
-        title="Projects"
-        intro="Data science, machine learning, software engineering and quant projects."
+        title={<T k="projects.title" />}
+        intro={<T k="projects.intro" />}
       />
       <ProjectGrid projects={projects} />
     </Container>

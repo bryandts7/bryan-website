@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Experiences from "@/components/experiences";
+import { T } from "@/components/Lang";
 import { Container, PageHeader } from "@/components/ui";
 import { getExperiences } from "@/lib/content";
 
@@ -14,7 +15,7 @@ export default async function ExperiencesPage() {
 
   return (
     <Container>
-      <PageHeader title="Experience" intro="Where I've worked and studied." />
+      <PageHeader title={<T k="experience.title" />} intro={<T k="experience.intro" />} />
       <Experiences experiences={experiences} />
     </Container>
   );

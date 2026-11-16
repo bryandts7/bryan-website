@@ -15,7 +15,7 @@ export function Container({
   return <div className={`mx-auto w-full ${width} px-4 sm:px-6 ${className}`}>{children}</div>;
 }
 
-export function PageHeader({ title, intro }: { title: string; intro?: ReactNode }) {
+export function PageHeader({ title, intro }: { title: ReactNode; intro?: ReactNode }) {
   return (
     <header className="pt-12 pb-8 sm:pt-16">
       <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">{title}</h1>
@@ -29,9 +29,9 @@ export function SectionHeading({
   href,
   linkLabel,
 }: {
-  title: string;
+  title: ReactNode;
   href?: string;
-  linkLabel?: string;
+  linkLabel?: ReactNode;
 }) {
   return (
     <div className="mb-6 flex items-baseline justify-between gap-4">

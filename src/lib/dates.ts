@@ -16,10 +16,10 @@ export function formatDateTime(iso: string): string {
   });
 }
 
-/** "March 7, 2025", or null when there is no date. */
-export function formatDate(iso: string | null): string | null {
+/** "March 7, 2025" ("7 Maret 2025" in Indonesian), or null when there is no date. */
+export function formatDate(iso: string | null, lang: "en" | "id" = "en"): string | null {
   if (!iso) return null;
-  return new Date(iso).toLocaleDateString("en-US", {
+  return new Date(iso).toLocaleDateString(lang === "id" ? "id-ID" : "en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",

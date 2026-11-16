@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
+import { T } from "./Lang";
 
 /** Seconds the post must be visible on screen before the view counts. */
 const SECONDS_BEFORE_COUNTING = 5;
@@ -54,7 +55,9 @@ export default function PostViews({ postId, slug }: { postId: string; slug: stri
 
     const storageKey = `post-viewed:${slug}`;
     const isBot = navigator.webdriver || BOT_PATTERN.test(navigator.userAgent);
-    if (!isBot && readStorage(storageKey) !== today()) {
+    // A local copy of the site talks to the live database: don't count test visits.
+    const isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
+    if (!isBot && !isLocal && readStorage(storageKey) !== today()) {
       let visibleSeconds = 0;
       timer = setInterval(() => {
         if (document.visibilityState !== "visible") return;
@@ -80,7 +83,7 @@ export default function PostViews({ postId, slug }: { postId: string; slug: stri
     <>
       <span aria-hidden>·</span>
       <span>
-        {views.toLocaleString("en-US")} view{views === 1 ? "" : "s"}
+        {views.toLocaleString("en-US")} <T k={views === 1 ? "blog.view" : "blog.views"} />
       </span>
     </>
   );

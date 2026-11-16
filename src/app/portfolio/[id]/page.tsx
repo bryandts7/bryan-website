@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BackLink from "@/components/BackLink";
+import { Bi, T } from "@/components/Lang";
 import { articleProse } from "@/components/blog";
 import { DocumentIcon, ExternalIcon, GitHubIcon } from "@/components/icons";
 import MarkdownContent from "@/components/MarkdownContent";
@@ -52,11 +53,19 @@ export default async function ProjectDetailsPage({ params }: Props) {
 
   return (
     <Container size="narrow" className="pt-8">
-      <BackLink href="/portfolio">All projects</BackLink>
+      <BackLink href="/portfolio">
+        <T k="projects.all" />
+      </BackLink>
 
       <header className="pt-8 pb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">{project.title}</h1>
-        {project.description && <p className="mt-3 text-lg text-muted">{project.description}</p>}
+        <h1 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          <Bi en={project.title} id={project.title_id} />
+        </h1>
+        {project.description && (
+          <p className="mt-3 text-lg text-muted">
+            <Bi en={project.description} id={project.description_id} />
+          </p>
+        )}
         {project.technologies.length > 0 && (
           <div className="mt-5 flex flex-wrap gap-1.5">
             {project.technologies.map((tech) => (
@@ -68,21 +77,21 @@ export default async function ProjectDetailsPage({ params }: Props) {
           {project.demo_url &&
             (demoIsInternal ? (
               <Link href={project.demo_url} className={buttonPrimary}>
-                {project.is_interactive ? "Try it" : "Demo"}
+                <T k={project.is_interactive ? "projects.tryIt" : "projects.demo"} />
               </Link>
             ) : (
               <a href={project.demo_url} target="_blank" rel="noopener noreferrer" className={buttonPrimary}>
-                <ExternalIcon /> Demo
+                <ExternalIcon /> <T k="projects.demo" />
               </a>
             ))}
           {project.github_url && (
             <a href={project.github_url} target="_blank" rel="noopener noreferrer" className={buttonSecondary}>
-              <GitHubIcon className="h-4 w-4" /> Code
+              <GitHubIcon className="h-4 w-4" /> <T k="projects.code" />
             </a>
           )}
           {project.paper_url && (
             <a href={project.paper_url} target="_blank" rel="noopener noreferrer" className={buttonSecondary}>
-              <DocumentIcon /> Paper
+              <DocumentIcon /> <T k="projects.paper" />
             </a>
           )}
         </div>
@@ -103,9 +112,21 @@ export default async function ProjectDetailsPage({ params }: Props) {
       )}
 
       {project.content_md.trim() && (
-        <div className={articleProse}>
-          <MarkdownContent>{project.content_md}</MarkdownContent>
-        </div>
+        <Bi
+          block
+          en={
+            <div className={articleProse}>
+              <MarkdownContent>{project.content_md}</MarkdownContent>
+            </div>
+          }
+          id={
+            project.content_md_id?.trim() ? (
+              <div className={articleProse}>
+                <MarkdownContent>{project.content_md_id}</MarkdownContent>
+              </div>
+            ) : null
+          }
+        />
       )}
     </Container>
   );

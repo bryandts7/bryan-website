@@ -9,6 +9,9 @@ export interface PostSummary {
   slug: string;
   title: string;
   excerpt: string;
+  /** Indonesian versions; null until translated (then the English is shown). */
+  title_id: string | null;
+  excerpt_id: string | null;
   tags: string[];
   published_at: string | null;
   updated_at: string;
@@ -18,6 +21,7 @@ export interface PostSummary {
 export interface Post extends PostSummary {
   id: string;
   content_md: string;
+  content_md_id: string | null;
   cover_image_url: string | null;
 }
 
@@ -27,6 +31,9 @@ export interface Project {
   title: string;
   description: string;
   content_md: string;
+  title_id: string | null;
+  description_id: string | null;
+  content_md_id: string | null;
   image_url: string | null;
   image_width: number | null;
   image_height: number | null;
@@ -46,6 +53,9 @@ export interface Experience {
   organization: string;
   logo_url: string | null;
   details: string;
+  period_id: string | null;
+  title_id: string | null;
+  details_id: string | null;
 }
 
 function fail(what: string, message: string): never {
@@ -59,7 +69,7 @@ export async function getPosts(): Promise<PostSummary[]> {
 
   const { data, error } = await createPublicClient()
     .from("posts")
-    .select("slug, title, excerpt, tags, published_at, updated_at, content_md")
+    .select("slug, title, excerpt, title_id, excerpt_id, tags, published_at, updated_at, content_md")
     .eq("status", "published")
     .order("published_at", { ascending: false });
   if (error) fail("posts", error.message);
@@ -77,7 +87,9 @@ export async function getPost(slug: string): Promise<Post | null> {
 
   const { data, error } = await createPublicClient()
     .from("posts")
-    .select("id, slug, title, excerpt, content_md, cover_image_url, tags, published_at, updated_at")
+    .select(
+      "id, slug, title, excerpt, content_md, title_id, excerpt_id, content_md_id, cover_image_url, tags, published_at, updated_at"
+    )
     .eq("status", "published")
     .eq("slug", slug)
     .maybeSingle();
@@ -86,7 +98,7 @@ export async function getPost(slug: string): Promise<Post | null> {
 }
 
 const PROJECT_COLUMNS =
-  "id, slug, title, description, content_md, image_url, image_width, image_height, technologies, github_url, paper_url, demo_url, is_interactive, updated_at";
+  "id, slug, title, description, content_md, title_id, description_id, content_md_id, image_url, image_width, image_height, technologies, github_url, paper_url, demo_url, is_interactive, updated_at";
 
 export async function getProjects(): Promise<Project[]> {
   "use cache";
@@ -125,7 +137,7 @@ export async function getExperiences(): Promise<Experience[]> {
 
   const { data, error } = await createPublicClient()
     .from("experiences")
-    .select("id, kind, period, title, organization, logo_url, details")
+    .select("id, kind, period, title, organization, logo_url, details, period_id, title_id, details_id")
     .order("sort_order")
     .order("created_at");
   if (error) fail("experiences", error.message);

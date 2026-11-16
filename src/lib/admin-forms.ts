@@ -53,6 +53,12 @@ export class FormReader {
     return value;
   }
 
+  /** Like text(), but an empty field becomes null (e.g. an untranslated Indonesian field). */
+  optionalText(name: string, options: { max?: number; multiline?: boolean } = {}): string | null {
+    const value = this.text(name, options);
+    return value.trim() ? value : null;
+  }
+
   /** The row id for an edit, or null when creating. */
   optionalId(name = "id"): string | null {
     const value = this.raw(name).trim();

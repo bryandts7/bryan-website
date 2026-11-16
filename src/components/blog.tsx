@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 import MarkdownContent from "./MarkdownContent";
 import { Tag } from "./ui";
 
@@ -10,13 +11,15 @@ interface BlogProps {
   readingMinutes?: number;
   tags?: string[];
   coverImageUrl?: string | null;
+  /** Extra items for the date line, e.g. the view count. */
+  meta?: ReactNode;
 }
 
 /** Shared article typography: readable line length, dark-mode aware. */
 export const articleProse =
   "prose prose-zinc max-w-none sm:prose-lg dark:prose-invert prose-headings:tracking-tight prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-pre:border prose-pre:border-line prose-code:before:content-none prose-code:after:content-none";
 
-function Blog({ title, content, date, isoDate, readingMinutes, tags = [], coverImageUrl }: BlogProps) {
+function Blog({ title, content, date, isoDate, readingMinutes, tags = [], coverImageUrl, meta }: BlogProps) {
   return (
     <article>
       <header className="pt-8 pb-8">
@@ -25,6 +28,7 @@ function Blog({ title, content, date, isoDate, readingMinutes, tags = [], coverI
           {date && <time dateTime={isoDate ?? undefined}>{date}</time>}
           {date && readingMinutes && <span aria-hidden>·</span>}
           {readingMinutes && <span>{readingMinutes} min read</span>}
+          {meta}
           {tags.length > 0 && (
             <span className="flex flex-wrap gap-1.5 sm:ml-2">
               {tags.map((tag) => (

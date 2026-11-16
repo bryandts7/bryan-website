@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import BackLink from "@/components/BackLink";
 import JsonLd from "@/components/JsonLd";
+import PostViews from "@/components/PostViews";
 import Blog from "@/components/blog";
 import CommentsSection, { CommentsSkeleton } from "@/components/comments/CommentsSection";
 import { Container } from "@/components/ui";
@@ -64,6 +65,7 @@ export default async function BlogPostPage({ params }: Props) {
         readingMinutes={post.reading_minutes}
         tags={post.tags}
         coverImageUrl={post.cover_image_url}
+        meta={<PostViews postId={post.id} slug={post.slug} />}
       />
       <section id="comments" className="mt-16 scroll-mt-24 border-t border-line pt-10">
         {/* Comments are cached and built with the page; the sign-in state loads in the browser. */}

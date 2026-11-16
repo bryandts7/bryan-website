@@ -4,11 +4,16 @@ import Link from "next/link";
 import Markdown from "react-markdown";
 import MyFace from "@/assets/bryan_photo_new.jpg";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
+import JsonLd from "@/components/JsonLd";
 import PostCard from "@/components/PostCard";
 import ProjectGrid from "@/components/ProjectGrid";
 import { buttonPrimary, buttonSecondary, Container, SectionHeading } from "@/components/ui";
 import { getExperiences, getPosts, getProjects, getSiteContent } from "@/lib/content";
 import { SITE_DESCRIPTION, SOCIAL_LINKS } from "@/lib/site";
+import { homeStructuredData } from "@/lib/structured-data";
+
+/** Academic entries that are degrees (not research jobs or capstones) count as schools attended. */
+const DEGREE_TITLE = /^(b\.?\s?sc|m\.?\s?sc|b\.?\s?a\b|m\.?\s?a\b|bachelor|master|ph\.?\s?d|doctor)/i;
 
 export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
@@ -26,9 +31,24 @@ export default async function HomePage() {
   // The headline role is the first "Industry experience" entry (edit it in the admin console).
   const current = experiences.find((entry) => entry.kind === "work");
   const organization = current?.organization.replace(/\s*\(.*\)\s*$/, "");
+  const schools = [
+    ...new Set(
+      experiences
+        .filter((entry) => entry.kind === "academic" && DEGREE_TITLE.test(entry.title))
+        .map((entry) => entry.organization.replace(/\s*\(.*\)\s*$/, "")),
+    ),
+  ];
 
   return (
     <>
+      <JsonLd
+        data={homeStructuredData({
+          photoUrl: MyFace.src,
+          jobTitle: current?.title,
+          organization,
+          alumniOf: schools,
+        })}
+      />
       {/* Hero */}
       <section className="border-b border-line">
         <Container className="grid items-center gap-10 py-16 sm:py-20 md:grid-cols-[1fr_auto]">

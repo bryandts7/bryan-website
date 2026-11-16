@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import BackLink from "@/components/BackLink";
+import JsonLd from "@/components/JsonLd";
 import Blog from "@/components/blog";
 import CommentsSection, { CommentsSkeleton } from "@/components/comments/CommentsSection";
 import { Container } from "@/components/ui";
 import { formatDate, getPost, getPosts } from "@/lib/content";
 import { OPEN_GRAPH_DEFAULTS } from "@/lib/site";
+import { postStructuredData } from "@/lib/structured-data";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -52,6 +54,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <Container size="narrow" className="pt-8">
+      <JsonLd data={postStructuredData(post)} />
       <BackLink href="/blogs">All posts</BackLink>
       <Blog
         title={post.title}

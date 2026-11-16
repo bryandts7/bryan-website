@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import { OPEN_GRAPH_DEFAULTS, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import { LANG_INIT_SCRIPT } from "@/lib/i18n";
-import { THEME_INIT_SCRIPT } from "@/lib/theme-script";
+import { HOSTING_COMMENT_CLEANUP_SCRIPT, THEME_INIT_SCRIPT } from "@/lib/theme-script";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -48,8 +48,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     // suppressHydrationWarning: the head script may add data-theme/data-lang before React loads.
     <html lang="en" className={`${inter.variable} ${jetbrains.variable} ${pixelify.variable}`} suppressHydrationWarning>
       <head>
-        {/* Apply the saved theme and language before the page paints. */}
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT + LANG_INIT_SCRIPT }} />
+        {/* Remove Netlify's injected head comment, then apply the saved theme and language before the page paints. */}
+        <script dangerouslySetInnerHTML={{ __html: HOSTING_COMMENT_CLEANUP_SCRIPT + THEME_INIT_SCRIPT + LANG_INIT_SCRIPT }} />
       </head>
       <body className="flex min-h-screen flex-col">
         <a

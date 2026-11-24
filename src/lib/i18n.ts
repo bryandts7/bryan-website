@@ -57,6 +57,10 @@ const en = {
   "projects.demo": "Demo",
   "projects.code": "Code",
   "projects.paper": "Paper",
+  "projects.work": "Work projects",
+  "projects.workIntro": "Products and research I worked on in my job. These open on the company's website.",
+  "projects.personal": "Personal projects",
+  "projects.readOn": "Read on",
 
   // Experience
   "experience.title": "Experience",
@@ -144,6 +148,10 @@ const id: Record<MessageKey, string> = {
   "projects.demo": "Demo",
   "projects.code": "Kode",
   "projects.paper": "Makalah",
+  "projects.work": "Proyek kerja",
+  "projects.workIntro": "Produk dan riset yang saya kerjakan di pekerjaan saya. Tautannya membuka website perusahaan.",
+  "projects.personal": "Proyek pribadi",
+  "projects.readOn": "Baca di",
 
   "experience.title": "Pengalaman",
   "experience.intro": "Tempat saya bekerja dan belajar.",

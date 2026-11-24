@@ -29,6 +29,8 @@ export default async function HomePage() {
     getProjects(),
     getExperiences(),
   ]);
+  // Work projects link to the employer's site; the home page features my own.
+  const personalProjects = projects.filter((project) => project.kind !== "work");
 
   // The headline role is the first "Industry experience" entry (edit it in the admin console).
   const current = experiences.find((entry) => entry.kind === "work");
@@ -140,14 +142,14 @@ export default async function HomePage() {
         </Container>
       )}
 
-      {projects.length > 0 && (
+      {personalProjects.length > 0 && (
         <Container className="pb-8">
           <SectionHeading
             title={<T k="home.selectedProjects" />}
             href="/portfolio"
             linkLabel={<T k="home.allProjects" />}
           />
-          <ProjectGrid projects={projects.slice(0, 3)} headingLevel="h3" />
+          <ProjectGrid projects={personalProjects.slice(0, 3)} headingLevel="h3" />
         </Container>
       )}
     </>

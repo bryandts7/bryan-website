@@ -42,6 +42,12 @@ export interface Project {
   paper_url: string | null;
   demo_url: string | null;
   is_interactive: boolean;
+  /** "work": made at a job; listed under Work projects. */
+  kind: "personal" | "work";
+  /** Who it was made for, shown on the card (e.g. the employer). */
+  organization: string;
+  /** When set, the card opens this page instead of a project page here. */
+  external_url: string | null;
   updated_at: string;
 }
 
@@ -98,7 +104,7 @@ export async function getPost(slug: string): Promise<Post | null> {
 }
 
 const PROJECT_COLUMNS =
-  "id, slug, title, description, content_md, title_id, description_id, content_md_id, image_url, image_width, image_height, technologies, github_url, paper_url, demo_url, is_interactive, updated_at";
+  "id, slug, title, description, content_md, title_id, description_id, content_md_id, image_url, image_width, image_height, technologies, github_url, paper_url, demo_url, is_interactive, kind, organization, external_url, updated_at";
 
 export async function getProjects(): Promise<Project[]> {
   "use cache";
@@ -125,9 +131,16 @@ export async function getProject(slug: string): Promise<Project | null> {
     .select(PROJECT_COLUMNS)
     .eq("status", "published")
     .eq("slug", slug)
+    // Projects that link to another site have no page here.
+    .is("external_url", null)
     .maybeSingle();
   if (error) fail(`project "${slug}"`, error.message);
   return data;
+}
+
+/** Projects that have their own page on this site (not links elsewhere). */
+export function projectsWithPages(projects: Project[]): Project[] {
+  return projects.filter((project) => !project.external_url);
 }
 
 export async function getExperiences(): Promise<Experience[]> {

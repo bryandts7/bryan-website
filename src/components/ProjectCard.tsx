@@ -7,14 +7,26 @@ import { Tag } from "./ui";
 
 const MAX_TAGS = 4;
 
+/** "https://www.example.com/a/b" -> "example.com" */
+function siteName(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
 /**
  * One project in a grid. The title link covers the whole card; the GitHub,
- * paper and demo links sit above it so they stay clickable.
+ * paper and demo links sit above it so they stay clickable. A project with an
+ * external link (a work project) opens that page in a new tab instead of a
+ * project page here.
  */
 export default function ProjectCard({ project, headingLevel = "h2" }: { project: Project; headingLevel?: "h2" | "h3" }) {
   const Heading = headingLevel;
   const extraTags = project.technologies.length - MAX_TAGS;
   const demoIsInternal = project.demo_url?.startsWith("/") ?? false;
+  const external = project.external_url;
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-xl border border-line bg-card transition-colors hover:border-subtle">
@@ -28,6 +40,11 @@ export default function ProjectCard({ project, headingLevel = "h2" }: { project:
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
         )}
+        {project.organization && (
+          <span className="absolute top-3 left-3 rounded-full bg-card/90 px-2.5 py-1 text-xs font-semibold text-ink shadow backdrop-blur">
+            {project.organization}
+          </span>
+        )}
         {project.is_interactive && (
           <span className="absolute top-3 right-3 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white shadow">
             <T k="projects.interactive" />
@@ -37,9 +54,15 @@ export default function ProjectCard({ project, headingLevel = "h2" }: { project:
 
       <div className="flex grow flex-col p-5">
         <Heading className="text-lg font-semibold leading-snug text-ink group-hover:text-accent">
-          <Link href={`/portfolio/${project.slug}`} className="after:absolute after:inset-0">
-            <Bi en={project.title} id={project.title_id} />
-          </Link>
+          {external ? (
+            <a href={external} target="_blank" rel="noopener noreferrer" className="after:absolute after:inset-0">
+              <Bi en={project.title} id={project.title_id} />
+            </a>
+          ) : (
+            <Link href={`/portfolio/${project.slug}`} className="after:absolute after:inset-0">
+              <Bi en={project.title} id={project.title_id} />
+            </Link>
+          )}
         </Heading>
         {project.description && (
           <p className="mt-2 line-clamp-3 text-sm text-muted">
@@ -57,6 +80,11 @@ export default function ProjectCard({ project, headingLevel = "h2" }: { project:
         )}
 
         <div className="relative z-10 mt-auto flex flex-wrap items-center gap-4 pt-5 text-sm font-medium">
+          {external && (
+            <a href={external} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-accent hover:underline">
+              <ExternalIcon /> <T k="projects.readOn" /> {siteName(external)}
+            </a>
+          )}
           {project.is_interactive && project.demo_url && (
             <Link href={project.demo_url} className="text-emerald-600 hover:underline dark:text-emerald-400">
               <T k="projects.tryIt" /> →

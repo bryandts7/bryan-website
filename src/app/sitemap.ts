@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getPosts, getProjects } from "@/lib/content";
+import { getPosts, getProjects, projectsWithPages } from "@/lib/content";
 import { SITE_URL } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -21,7 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly" as const,
       priority: 0.7,
     })),
-    ...projects.map((project) => ({
+    ...projectsWithPages(projects).map((project) => ({
       url: `${SITE_URL}/portfolio/${project.slug}`,
       lastModified: project.updated_at,
       changeFrequency: "yearly" as const,

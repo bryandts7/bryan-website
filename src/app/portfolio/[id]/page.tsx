@@ -8,7 +8,7 @@ import { articleProse } from "@/components/blog";
 import { DocumentIcon, ExternalIcon, GitHubIcon } from "@/components/icons";
 import MarkdownContent from "@/components/MarkdownContent";
 import { buttonPrimary, buttonSecondary, Container, Tag } from "@/components/ui";
-import { getProject, getProjects } from "@/lib/content";
+import { getProject, getProjects, projectsWithPages } from "@/lib/content";
 import { OPEN_GRAPH_DEFAULTS } from "@/lib/site";
 
 interface Props {
@@ -22,7 +22,7 @@ export const ensureStatic = "navigation";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
-  return projects.map(({ slug }) => ({ id: slug }));
+  return projectsWithPages(projects).map(({ slug }) => ({ id: slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

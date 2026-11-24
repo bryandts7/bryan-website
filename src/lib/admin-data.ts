@@ -38,6 +38,9 @@ export interface AdminProject {
   paper_url: string | null;
   demo_url: string | null;
   is_interactive: boolean;
+  kind: "personal" | "work";
+  organization: string;
+  external_url: string | null;
   sort_order: number;
   status: "draft" | "published";
   updated_at: string;
@@ -91,7 +94,7 @@ export async function adminListProjects() {
   const supabase = await createSessionClient();
   const { data, error } = await supabase
     .from("projects")
-    .select("id, slug, title, status, sort_order, image_url, updated_at")
+    .select("id, slug, title, status, kind, sort_order, image_url, updated_at")
     .order("sort_order")
     .order("created_at");
   if (error) fail("projects", error.message);
@@ -104,7 +107,7 @@ export async function adminGetProject(id: string): Promise<AdminProject | null> 
   const { data, error } = await supabase
     .from("projects")
     .select(
-      "id, slug, title, description, content_md, title_id, description_id, content_md_id, image_url, image_width, image_height, technologies, github_url, paper_url, demo_url, is_interactive, sort_order, status, updated_at"
+      "id, slug, title, description, content_md, title_id, description_id, content_md_id, image_url, image_width, image_height, technologies, github_url, paper_url, demo_url, is_interactive, kind, organization, external_url, sort_order, status, updated_at"
     )
     .eq("id", id)
     .maybeSingle();

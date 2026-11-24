@@ -1,3 +1,4 @@
+import { isAllowedExternalImage } from "./external-images";
 import { SLUG_PATTERN } from "./slug";
 
 /** What an admin Server Function returns to its form when it does not redirect. */
@@ -118,7 +119,7 @@ export class FormReader {
   imageUrl(name: string): string | null {
     const value = this.raw(name).trim();
     if (!value) return null;
-    if (!value.startsWith(mediaUrlPrefix())) {
+    if (!value.startsWith(mediaUrlPrefix()) && !isAllowedExternalImage(value)) {
       this.fail(name, "Upload the image here instead of pasting a link.");
       return null;
     }

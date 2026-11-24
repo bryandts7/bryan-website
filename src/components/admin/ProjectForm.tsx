@@ -65,6 +65,43 @@ export default function ProjectForm({
           </Field>
         </div>
 
+        <div className="grid gap-6 md:grid-cols-3">
+          <Field label="Kind" htmlFor="kind" error={errors.kind}>
+            <select id="kind" name="kind" defaultValue={project?.kind ?? "personal"} className={inputClass}>
+              <option value="personal">Personal project</option>
+              <option value="work">Work project</option>
+            </select>
+          </Field>
+          <Field
+            label="Organization"
+            htmlFor="organization"
+            error={errors.organization}
+            hint="Badge on the card, e.g. Pixalate. Optional."
+          >
+            <input
+              id="organization"
+              name="organization"
+              defaultValue={project?.organization ?? ""}
+              className={inputClass}
+            />
+          </Field>
+          <Field
+            label="External link"
+            htmlFor="external_url"
+            error={errors.external_url}
+            hint="If set, the card opens this page (new tab) and there is no project page here."
+          >
+            <input
+              id="external_url"
+              name="external_url"
+              type="url"
+              defaultValue={project?.external_url ?? ""}
+              placeholder="https://…"
+              className={inputClass}
+            />
+          </Field>
+        </div>
+
         <Field
           label="Short description"
           htmlFor="description"
@@ -221,7 +258,12 @@ export default function ProjectForm({
         </IndonesianSection>
 
         <SaveBar pending={pending} dirty={dirty} label={project ? "Save changes" : "Create project"}>
-          {project?.status === "published" && (
+          {project?.status === "published" && project.external_url && (
+            <a href={project.external_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
+              Open link
+            </a>
+          )}
+          {project?.status === "published" && !project.external_url && (
             <Link href={`/portfolio/${project.slug}`} className="text-sm text-blue-600 hover:underline">
               View on site
             </Link>

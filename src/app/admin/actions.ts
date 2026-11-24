@@ -93,6 +93,9 @@ export async function saveProject(_prev: FormState, formData: FormData): Promise
     paper_url: form.link("paper_url"),
     demo_url: form.link("demo_url"),
     is_interactive: form.checkbox("is_interactive"),
+    kind: form.oneOf("kind", ["personal", "work"] as const),
+    organization: form.text("organization", { max: 100 }),
+    external_url: form.link("external_url"),
     sort_order: form.int("sort_order"),
     status: form.oneOf("status", ["draft", "published"] as const),
   };

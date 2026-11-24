@@ -5,7 +5,8 @@ import { getAdminState } from "@/lib/auth";
 
 const sections = [
   { kind: "work", heading: "Industry experience" },
-  { kind: "academic", heading: "Academia experience" },
+  { kind: "academic", heading: "Academia: education" },
+  { kind: "research", heading: "Academia: research & collaborations" },
 ] as const;
 
 export default async function AdminExperiencesPage({

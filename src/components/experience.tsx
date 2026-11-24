@@ -7,10 +7,12 @@ export interface ExperienceProps {
   company: string;
   logo?: string | null;
   details?: ReactNode;
+  headingLevel?: "h3" | "h4";
 }
 
 /** One entry on the experience timeline. */
-export default function Experience({ year, title, company, logo, details }: ExperienceProps) {
+export default function Experience({ year, title, company, logo, details, headingLevel = "h3" }: ExperienceProps) {
+  const Heading = headingLevel;
   return (
     <li className="relative">
       {/* Timeline dot */}
@@ -24,7 +26,7 @@ export default function Experience({ year, title, company, logo, details }: Expe
           </span>
         )}
         <div className="min-w-0">
-          <h3 className="font-semibold leading-snug text-ink">{title}</h3>
+          <Heading className="font-semibold leading-snug text-ink">{title}</Heading>
           <p className="text-sm text-muted">{company}</p>
         </div>
       </div>

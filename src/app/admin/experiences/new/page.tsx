@@ -14,7 +14,7 @@ export default async function NewExperiencePage({
     <div>
       <h2 className="mb-6 text-lg font-semibold text-stone-900">New experience entry</h2>
       <ResetOnNavigate>
-        <ExperienceForm defaultKind={kind === "academic" ? "academic" : "work"} />
+        <ExperienceForm defaultKind={kind === "academic" || kind === "research" ? kind : "work"} />
       </ResetOnNavigate>
     </div>
   );

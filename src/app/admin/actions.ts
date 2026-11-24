@@ -131,7 +131,7 @@ export async function saveExperience(_prev: FormState, formData: FormData): Prom
   const form = new FormReader(formData);
   const id = form.optionalId();
   const row = {
-    kind: form.oneOf("kind", ["work", "academic"] as const),
+    kind: form.oneOf("kind", ["work", "academic", "research"] as const),
     period: form.text("period", { required: true, max: 60 }),
     title: form.text("title", { required: true, max: 200 }),
     organization: form.text("organization", { max: 200 }),

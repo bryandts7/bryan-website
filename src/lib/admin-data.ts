@@ -48,7 +48,8 @@ export interface AdminProject {
 
 export interface AdminExperience {
   id: string;
-  kind: "work" | "academic";
+  /** work = Industry; academic = schools; research = research and collaborations. */
+  kind: "work" | "academic" | "research";
   period: string;
   title: string;
   organization: string;

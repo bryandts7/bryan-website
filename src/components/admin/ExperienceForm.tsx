@@ -12,7 +12,7 @@ export default function ExperienceForm({
   defaultKind = "work",
 }: {
   experience?: AdminExperience;
-  defaultKind?: "work" | "academic";
+  defaultKind?: "work" | "academic" | "research";
 }) {
   const { state, pending, dirty, markDirty, formProps } = useAdminForm(saveExperience);
   const errors = state.fieldErrors ?? {};
@@ -32,7 +32,8 @@ export default function ExperienceForm({
               className={inputClass}
             >
               <option value="work">Industry experience</option>
-              <option value="academic">Academia experience</option>
+              <option value="academic">Academia: education</option>
+              <option value="research">Academia: research &amp; collaborations</option>
             </select>
           </Field>
           <Field label="Period" htmlFor="period" error={errors.period} hint="e.g. Mar 2025 - Current">

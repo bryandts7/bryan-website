@@ -67,6 +67,8 @@ const en = {
   "experience.intro": "Where I've worked and studied.",
   "experience.industry": "Industry",
   "experience.academia": "Academia",
+  "experience.education": "Education",
+  "experience.research": "Research & collaborations",
 
   // Comments
   "comments.title": "Comments",
@@ -157,6 +159,8 @@ const id: Record<MessageKey, string> = {
   "experience.intro": "Tempat saya bekerja dan belajar.",
   "experience.industry": "Industri",
   "experience.academia": "Akademik",
+  "experience.education": "Pendidikan",
+  "experience.research": "Riset & kolaborasi",
 
   "comments.title": "Komentar",
   "comments.commentingAs": "Berkomentar sebagai",
